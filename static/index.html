@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transform your data into strategic predictions with AI-powered analytics and forecasting.">
+    <title>ForecastPro - Business Analytics & Forecasting Platform</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <div class="logo-icon">📊</div>
+                <span>ForecastPro</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#" onclick="showPage('data')" class="nav-link" data-page="data">Data</a></li>
+                <li><a href="#" onclick="showPage('forecast')" class="nav-link" data-page="forecast">Forecast</a></li>
+                <li><a href="#" onclick="showPage('dashboard')" class="nav-link" data-page="dashboard">Dashboard</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="btn btn-ghost">Login</button>
+                <button class="btn btn-primary" onclick="showPage('data')">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HOME PAGE ===== -->
+    <div id="page-home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <span class="hero-badge">
+                    ✨ AI-Powered Analytics
+                </span>
+                <h1>Transform Your Data into <span class="gradient-text">Strategic Predictions</span></h1>
+                <p>Empower your business with cutting-edge analytics to forecast trends, optimize strategies, and drive unparalleled growth.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="showPage('data')">
+                        Start Predicting Now →
+                    </button>
+                    <button class="btn btn-outline" onclick="showPage('forecast')">
+                        See Demo
+                    </button>
+                </div>
+                
+                <!-- Visual Preview -->
+                <div class="hero-visual">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <span style="font-weight: 600;">Sales Forecast</span>
+                        <span class="badge badge-blue">XGBoost Model</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div class="progress-bar"><div class="progress-fill blue" style="width: 85%;"></div></div>
+                        <div class="progress-bar"><div class="progress-fill pink" style="width: 70%;"></div></div>
+                        <div class="progress-bar"><div class="progress-fill blue" style="width: 92%;"></div></div>
+                        <div class="progress-bar"><div class="progress-fill pink" style="width: 65%;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">💫 Powerful Features</span>
+                    <h2>Everything You Need to <span class="gradient-text">Predict Success</span></h2>
+                    <p style="color: var(--text-secondary); margin-top: 12px;">
+                        Comprehensive tools and insights to transform your forecasting
+                    </p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="card feature-card">
+                        <div class="card-icon blue">📁</div>
+                        <h3>Data Warehouse</h3>
+                        <p>Access, filter, and analyze your historical data with powerful tools for clarity and control.</p>
+                    </div>
+                    
+                    <div class="card feature-card">
+                        <div class="card-icon pink">🔮</div>
+                        <h3>AI Forecasting</h3>
+                        <p>Get precise, data-driven forecasts with confidence intervals and customizable models.</p>
+                    </div>
+                    
+                    <div class="card feature-card">
+                        <div class="card-icon green">📊</div>
+                        <h3>Visualizations</h3>
+                        <p>Choose from bar, line, and area charts, each optimized for different data insights.</p>
+                    </div>
+                    
+                    <div class="card feature-card">
+                        <div class="card-icon purple">🎨</div>
+                        <h3>Dashboard Builder</h3>
+                        <p>Create custom dashboards by arranging widgets and charts exactly how you need them.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== DATA WAREHOUSE PAGE ===== -->
+    <div id="page-data" class="page">
+        <section class="page-header">
+            <div class="container">
+                <span class="section-badge">📁 Data Management</span>
+                <h1>Manage & Explore Your <span class="gradient-text">Data Warehouse</span></h1>
+                <p>Access, filter, and analyze your historical sales data with powerful tools.</p>
+            </div>
+        </section>
+        
+        <section style="padding: 40px 0;">
+            <div class="container">
+                <!-- Stats Row -->
+                <div class="stats-row">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Data Health Score</span>
+                            <div class="card-icon green">✓</div>
+                        </div>
+                        <div class="metric-value green" id="health-score">87<span style="font-size: 1rem; color: var(--text-muted);">/100</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill blue" id="health-progress" style="width: 87%;"></div>
+                        </div>
+                        <div class="metric-label">Excellent data quality</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Total Records</span>
+                            <div class="card-icon blue">📋</div>
+                        </div>
+                        <div class="metric-value blue" id="total-records">6,270</div>
+                        <div class="metric-label">Across all data sources</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Total Revenue</span>
+                            <div class="card-icon pink">📈</div>
+                        </div>
+                        <div class="metric-value pink" id="total-revenue">$12.4M</div>
+                        <div class="metric-label">Historical sales value</div>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="input-group">
+                        <span class="input-icon">🔍</span>
+                        <input type="text" class="input has-icon" placeholder="Search by date range, source, or region...">
+                    </div>
+                    <select class="input select filter-select">
+                        <option>All Status</option>
+                        <option>Clean</option>
+                        <option>Needs Review</option>
+                    </select>
+                    <select class="input select filter-select">
+                        <option>All Regions</option>
+                        <option>North America</option>
+                        <option>Europe</option>
+                        <option>Asia</option>
+                    </select>
+                    <button class="btn btn-ghost">🔄 Refresh</button>
+                    <button class="btn btn-ghost">⬇️ Export</button>
+                </div>
+                
+                <!-- Data Table -->
+                <div class="table-container">
+                    <table class="data-table" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date Range</th>
+                                <th>Sales Volume</th>
+                                <th>Records</th>
+                                <th>Status</th>
+                                <th>Source</th>
+                                <th>Region</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Rows populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== FORECAST PAGE ===== -->
+    <div id="page-forecast" class="page">
+        <section class="page-header">
+            <div class="container">
+                <span class="section-badge">🔮 AI-Powered Predictions</span>
+                <h1>Accurate Sales Forecasting <span class="gradient-text">Powered by AI</span></h1>
+                <p>Get precise, data-driven forecasts with confidence intervals and customizable models.</p>
+            </div>
+        </section>
+        
+        <section style="padding: 40px 0;">
+            <div class="container">
+                <!-- Forecast Stats -->
+                <div class="stats-row" style="margin-bottom: 32px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Prediction Accuracy</span>
+                            <div class="card-icon pink">🎯</div>
+                        </div>
+                        <div class="metric-value pink" id="accuracy">94.2%</div>
+                        <div class="metric-label">Based on historical validation</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Confidence Level</span>
+                            <div class="card-icon blue">⚡</div>
+                        </div>
+                        <div class="metric-value blue" id="confidence">89%</div>
+                        <div class="metric-label">95% confidence interval</div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Forecast Period</span>
+                            <div class="card-icon green">📅</div>
+                        </div>
+                        <div class="metric-value" id="period">6 <span style="font-size: 1rem;">months</span></div>
+                        <div class="metric-label">Jul 2024 - Dec 2024</div>
+                    </div>
+                </div>
+                
+                <!-- Main Content Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 320px; gap: 24px;">
+                    <!-- Chart Area -->
+                    <div class="card">
+                        <div class="chart-header">
+                            <div>
+                                <h3>Sales Forecast</h3>
+                                <p style="color: var(--text-muted); font-size: 0.875rem;">Historical data vs. AI predictions (in thousands $)</p>
+                            </div>
+                            <div class="chart-actions">
+                                <button class="btn btn-ghost">⬇️</button>
+                                <button class="btn btn-ghost">🔄</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="forecast-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Panel -->
+                    <div class="settings-panel">
+                        <div class="settings-title">
+                            ⚙️ Prediction Settings
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">Time Horizon</label>
+                            <select class="input select" id="time-horizon">
+                                <option value="1">1 day</option>
+                                <option value="7">1 week</option>
+                                <option value="30">1 month</option>
+                                <option value="90">3 months</option>
+                                <option value="180" selected>6 months</option>
+                            </select>
+                            <span class="setting-help">How far ahead to forecast</span>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">City</label>
+                            <select class="input select">
+                                <option>All Cities</option>
+                                <option>New York</option>
+                                <option>Los Angeles</option>
+                                <option>Chicago</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">Store</label>
+                            <select class="input select">
+                                <option>All Stores</option>
+                                <option>Store #1</option>
+                                <option>Store #2</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label class="setting-label">Product</label>
+                            <select class="input select">
+                                <option>All Products</option>
+                                <option>Electronics</option>
+                                <option>Clothing</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-secondary" style="width: 100%;" onclick="generateForecast()">
+                            📊 Generate Forecast
+                        </button>
+                        
+                        <div class="setting-group" style="margin-top: 24px;">
+                            <label class="setting-label">Model Sensitivity</label>
+                            <select class="input select">
+                                <option>Conservative</option>
+                                <option selected>Balanced</option>
+                                <option>Aggressive</option>
+                            </select>
+                            <span class="setting-help">Lower risk, narrower predictions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div id="page-dashboard" class="page">
+        <section class="page-header">
+            <div class="container">
+                <span class="section-badge">🎨 Dashboard Builder</span>
+                <h1>Drag-and-Drop <span class="gradient-text">Dashboard Builder</span></h1>
+                <p>Create custom dashboards by arranging widgets, charts, and data views.</p>
+            </div>
+        </section>
+        
+        <section style="padding: 40px 0;">
+            <div class="container">
+                <!-- Dashboard Header -->
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                    <h2>Sales Performance Dashboard</h2>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-ghost">↗️ Share</button>
+                        <button class="btn btn-ghost">⬇️ Export</button>
+                        <button class="btn btn-primary">+ Add Widget</button>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Revenue Chart Widget -->
+                    <div class="widget widget-lg">
+                        <div class="widget-header">
+                            <span class="widget-title">Revenue Overview</span>
+                            <button class="btn btn-ghost" style="padding: 4px 8px;">⬆️ Upload</button>
+                        </div>
+                        <div class="widget-body">
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="revenue-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Donut Chart Widget -->
+                    <div class="widget widget-lg">
+                        <div class="widget-header">
+                            <span class="widget-title">Top Products</span>
+                            <div class="card-icon purple" style="width: 28px; height: 28px; font-size: 14px;">🕐</div>
+                        </div>
+                        <div class="widget-body">
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="products-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Type Cards -->
+                    <div class="widget widget-md">
+                        <div class="widget-header">
+                            <span class="widget-title">Bar Chart</span>
+                            <div class="card-icon blue" style="width: 28px; height: 28px; font-size: 14px;">📊</div>
+                        </div>
+                        <div class="widget-body">
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Compare values across categories</p>
+                            <div style="display: flex; gap: 8px; height: 80px; align-items: flex-end;">
+                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 60%;"></div>
+                                <div style="flex: 1; background: var(--primary-light); border-radius: 4px; height: 80%;"></div>
+                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 45%;"></div>
+                                <div style="flex: 1; background: var(--primary-light); border-radius: 4px; height: 90%;"></div>
+                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 70%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="widget widget-md">
+                        <div class="widget-header">
+                            <span class="widget-title">Line Chart</span>
+                            <div class="card-icon pink" style="width: 28px; height: 28px; font-size: 14px;">📈</div>
+                        </div>
+                        <div class="widget-body">
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Track trends over time</p>
+                            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
+                                <path d="M0,60 Q50,20 100,40 T200,20" fill="none" stroke="var(--secondary)" stroke-width="3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="widget widget-md">
+                        <div class="widget-header">
+                            <span class="widget-title">Area Chart</span>
+                            <div class="card-icon green" style="width: 28px; height: 28px; font-size: 14px;">📉</div>
+                        </div>
+                        <div class="widget-body">
+                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Show cumulative data trends</p>
+                            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
+                                <defs>
+                                    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--accent-mint);stop-opacity:0.5" />
+                                        <stop offset="100%" style="stop-color:var(--accent-mint);stop-opacity:0" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0,60 Q50,30 100,45 T200,25 L200,80 L0,80 Z" fill="url(#areaGrad)"/>
+                                <path d="M0,60 Q50,30 100,45 T200,25" fill="none" stroke="var(--accent-mint)" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Main JavaScript -->
+    <script src="/js/app.js"></script>
+</body>
+</html>
