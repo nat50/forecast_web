@@ -1,3 +1,13 @@
-websockets>=12.0
-aiohttp>=3.9.0
-aiofiles>=23.0.0
+aiohttp
+aiofiles
+pandas
+numpy
+scikit-learn
+xgboost
+shap
+joblib
+matplotlib
+scipy
+seaborn
+imbalanced-learn
+openpyxl

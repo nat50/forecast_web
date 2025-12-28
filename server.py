@@ -1,31 +1,39 @@
 """
-Business Analytics & Forecasting Platform
+Dry Eye Disease Prediction Platform
 Single Python server serving static files + WebSocket API.
 
 Usage:
-    python server.py --server-ip 0.0.0.0 --server-port 8765
+    python server.py --server-ip 0.0.0.0 --server-port 9000
 
 AI Integration:
-    Replace the mock handlers in handle_websocket() with your models.
+    Uses XGBoost model for dry eye disease prediction.
 """
 
 import argparse
 import asyncio
 import json
 import os
+import sys
 from pathlib import Path
 
 from aiohttp import web
 import aiofiles
+import pandas as pd
 
-# Import mock data (replace with your AI models later)
-from mock_data import (
-    get_sales_records,
-    get_data_health,
-    get_forecast_data,
-    get_dashboard_widgets,
-    get_chart_data
-)
+# Add model directory to path
+MODEL_DIR = Path(__file__).parent / "model"
+sys.path.insert(0, str(MODEL_DIR))
+
+from predict_explain import DryEyePredictor
+
+# Initialize predictor
+predictor = None
+
+def get_predictor():
+    global predictor
+    if predictor is None:
+        predictor = DryEyePredictor(model_dir=str(MODEL_DIR))
+    return predictor
 
 
 # Get the directory where this script is located
@@ -52,8 +60,7 @@ async def handle_websocket(request):
     """
     WebSocket handler for real-time data communication.
     
-    AI Integration Point:
-    Replace the mock data calls below with your actual AI model predictions.
+    Handles dry eye disease prediction requests.
     """
     ws = web.WebSocketResponse()
     await ws.prepare(request)
@@ -67,46 +74,27 @@ async def handle_websocket(request):
                 action = data.get("action", "")
                 
                 # Handle different actions
-                if action == "get_sales_records":
-                    response = {
-                        "action": "sales_records",
-                        "data": get_sales_records()
-                    }
-                
-                elif action == "get_data_health":
-                    response = {
-                        "action": "data_health",
-                        "data": get_data_health()
-                    }
-                
-                elif action == "get_forecast":
-                    # AI Integration: Replace get_forecast_data() with your model
-                    params = data.get("params", {})
-                    response = {
-                        "action": "forecast",
-                        "data": get_forecast_data()
-                    }
-                
-                elif action == "get_dashboard_widgets":
-                    response = {
-                        "action": "dashboard_widgets",
-                        "data": get_dashboard_widgets()
-                    }
-                
-                elif action == "get_chart_data":
-                    chart_type = data.get("chartType", "bar")
-                    response = {
-                        "action": "chart_data",
-                        "data": get_chart_data(chart_type)
-                    }
-                
-                elif action == "upload_data":
-                    # Handle file upload data
-                    file_data = data.get("fileData", "")
-                    response = {
-                        "action": "upload_complete",
-                        "data": {"success": True, "message": "Data received"}
-                    }
+                if action == "predict_dry_eye":
+                    try:
+                        # Get input data from request
+                        input_data = data.get("data", {})
+                        
+                        # Create DataFrame with single row
+                        df = pd.DataFrame([input_data])
+                        
+                        # Get predictor and make prediction
+                        pred = get_predictor()
+                        results = pred.predict(df)
+                        
+                        response = {
+                            "action": "prediction_result",
+                            "data": results[0]
+                        }
+                    except Exception as e:
+                        response = {
+                            "action": "error",
+                            "data": {"message": f"Prediction error: {str(e)}"}
+                        }
                 
                 else:
                     response = {
@@ -144,12 +132,12 @@ def create_app():
 def main():
     """Main entry point with CLI argument parsing."""
     parser = argparse.ArgumentParser(
-        description="Business Analytics & Forecasting Platform Server"
+        description="Dry Eye Disease Prediction Platform Server"
     )
     parser.add_argument(
         "--server-ip",
-        default="0.0.0.0",
-        help="Server IP address (default: 0.0.0.0 for all interfaces)"
+        default="127.0.0.1",
+        help="Server IP address (default: 127.0.0.1 for localhost)"
     )
     parser.add_argument(
         "--server-port",
@@ -166,10 +154,15 @@ def main():
         print("Creating static directory...")
         STATIC_DIR.mkdir(parents=True, exist_ok=True)
     
+    # Pre-load the model
+    print("Loading dry eye prediction model...")
+    get_predictor()
+    print("Model loaded successfully!")
+    
     app = create_app()
     
     print(f"\n{'='*50}")
-    print("  Business Analytics & Forecasting Platform")
+    print("  Dry Eye Disease Prediction Platform")
     print(f"{'='*50}")
     print(f"  Server: http://{args.server_ip}:{args.server_port}")
     print(f"  WebSocket: ws://{args.server_ip}:{args.server_port}/ws")

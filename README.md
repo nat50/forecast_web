@@ -1,83 +1,102 @@
-# ForecastPro - Business Analytics & Forecasting Platform
+# DryEye Predict - Dry Eye Disease Risk Assessment
 
-A professional web platform for data analysis, demand forecasting, and visualization.
-
-![Preview](static/preview.png)
+Web application for dry eye disease risk prediction using XGBoost machine learning model.
 
 ## Features
 
-- 📊 **Data Warehouse** - Manage and explore your historical data
-- 🔮 **AI Forecasting** - Generate predictions (plug in your own models)
-- 📈 **Visualizations** - Bar, line, and area charts
-- 🎨 **Dashboard Builder** - Drag-and-drop custom dashboards
-
-## Quick Start
-
-### 1. Install Dependencies
-
-```bash
-cd e:\forecast_web
-pip install -r requirements.txt
-```
-
-### 2. Run the Server
-
-```bash
-python server.py --server-ip 0.0.0.0 --server-port 9000
-```
-
-### 3. Access the Platform
-
-Open in browser: `http://<your-pc-ip>:9000`
-
-For example: `http://192.168.1.100:9000`
-
-## Command Line Options
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `--server-ip` | `0.0.0.0` | Server IP (0.0.0.0 = all interfaces) |
-| `--server-port` | `9000` | Server port |
+- Real-time risk assessment through web interface
+- 25-field health questionnaire with flexible input
+- 4-level risk classification (Low, Moderate, High, Very High)
+- Professional medical-themed UI
 
 ## Project Structure
 
 ```
 forecast_web/
-├── server.py          # Python server (HTTP + WebSocket)
-├── mock_data.py       # Sample data for charts
-├── requirements.txt   # Python dependencies
-├── README.md          # This file
-└── static/            # Frontend files
-    ├── index.html     # Main HTML page
-    ├── css/style.css  # Styles (pastel cute theme)
-    └── js/app.js      # JavaScript application
+├── server.py                    # Web server
+├── requirements.txt             # Dependencies
+├── model/
+│   ├── dry_eye_xgboost.ipynb   # Training notebook
+│   ├── predict_explain.py       # Prediction API
+│   ├── xgboost_dry_eye_model.joblib
+│   └── Dry Eye Disease/Dry_Eye_Dataset.csv
+└── static/
+    ├── index.html
+    ├── css/style.css
+    └── js/app.js
 ```
 
-## AI Model Integration
+## Quick Start
 
-To add your own forecasting models:
-
-1. Open `server.py`
-2. Find the `handle_websocket()` function
-3. Replace `get_forecast_data()` with your model:
-
-```python
-elif action == "get_forecast":
-    # Replace this with your AI model
-    params = data.get("params", {})
-    prediction = your_ai_model.predict(params)
-    response = {
-        "action": "forecast",
-        "data": prediction
-    }
+**Install dependencies:**
+```bash
+pip install -r requirements.txt
 ```
 
-## Tech Stack
+**Run the web application:**
+```bash
+python server.py
+```
 
-- **Backend**: Python + aiohttp + websockets
-- **Frontend**: Vanilla HTML/CSS/JS + Chart.js
-- **Theme**: Pastel cute (sky blue & light pink)
+Open browser: `http://127.0.0.1:9000`
 
-## License
+**Custom server configuration:**
+```bash
+python server.py --server-ip 0.0.0.0 --server-port 8080
+```
 
-MIT
+## Training Model
+
+**Open training notebook:**
+```bash
+cd model
+jupyter notebook dry_eye_xgboost.ipynb
+```
+
+The notebook includes data exploration, feature engineering, model training, evaluation, and SHAP analysis. After training, the new model file `xgboost_dry_eye_model.joblib` will be used automatically by the web app.
+
+## Technology Stack
+
+- **Backend**: Python, aiohttp, WebSocket
+- **ML**: XGBoost, scikit-learn, pandas, SHAP
+- **Frontend**: HTML5/CSS3/JavaScript
+
+## Model Details
+
+See [model/README_Dry_Eye.md](model/README_Dry_Eye.md) for technical documentation.
+- WebSocket API client
+- Responsive design
+
+## ⚠️ Medical Disclaimer
+
+This tool is for **informational and educational purposes only**. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified eye care specialist for:
+- Comprehensive eye examinations
+- Accurate diagnosis of eye conditions
+- Personalized treatment recommendations
+- Management of dry eye disease
+
+## 📖 Documentation
+
+- [Main README](README.md) - This file, project overview
+- [Model Documentation](model/README_Dry_Eye.md) - Detailed model information, features, and variables
+
+## 📄 License
+
+MIT License - Free for educational and research purposes
+
+## 🤝 Contributing
+
+This is an educational project. Feel free to:
+- Experiment with different ML models
+- Improve the web interface
+- Add new features or visualizations
+- Enhance model interpretability
+
+## 📧 Support
+
+For issues or questions about:
+- **Running the application** - Check the Quick Start section
+- **Training the model** - See the Jupyter notebook comments
+- **Understanding features** - Review the model documentation
+
+

@@ -1,9 +1,6 @@
 /**
- * Business Analytics & Forecasting Platform
+ * DryEye Predict - AI-Powered Eye Health Assessment
  * Main JavaScript Application
- * 
- * AI Integration: WebSocket handlers receive mock data.
- * Replace server handlers to use your AI models.
  */
 
 // ===== Configuration =====
@@ -11,7 +8,6 @@ const WS_URL = `ws://${window.location.host}/ws`;
 
 // ===== State =====
 let ws = null;
-let charts = {};
 let currentPage = 'home';
 
 // ===== WebSocket Connection =====
@@ -19,8 +15,7 @@ function connectWebSocket() {
     ws = new WebSocket(WS_URL);
 
     ws.onopen = () => {
-        console.log('✅ WebSocket connected');
-        loadPageData();
+        console.log('WebSocket connected');
     };
 
     ws.onmessage = (event) => {
@@ -29,40 +24,31 @@ function connectWebSocket() {
     };
 
     ws.onerror = (error) => {
-        console.error('❌ WebSocket error:', error);
+        console.error('WebSocket error:', error);
     };
 
     ws.onclose = () => {
-        console.log('🔄 WebSocket disconnected, reconnecting...');
+        console.log('WebSocket disconnected, reconnecting...');
         setTimeout(connectWebSocket, 3000);
     };
 }
 
-function sendMessage(action, params = {}) {
+function sendMessage(action, data = {}) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ action, ...params }));
+        ws.send(JSON.stringify({ action, data }));
+    } else {
+        console.error('WebSocket not connected');
+        showError('Connection error. Please refresh the page.');
     }
 }
 
 function handleWebSocketMessage(response) {
     switch (response.action) {
-        case 'sales_records':
-            renderSalesTable(response.data);
-            break;
-        case 'data_health':
-            updateDataHealth(response.data);
-            break;
-        case 'forecast':
-            updateForecast(response.data);
-            break;
-        case 'dashboard_widgets':
-            renderDashboard(response.data);
-            break;
-        case 'chart_data':
-            updateChart(response.data);
+        case 'prediction_result':
+            displayResults(response.data);
             break;
         case 'error':
-            console.error('Server error:', response.data.message);
+            showError(response.data.message);
             break;
     }
 }
@@ -89,286 +75,165 @@ function showPage(pageName) {
     });
 
     currentPage = pageName;
-    loadPageData();
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function loadPageData() {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return;
-
-    switch (currentPage) {
-        case 'data':
-            sendMessage('get_sales_records');
-            sendMessage('get_data_health');
-            break;
-        case 'forecast':
-            sendMessage('get_forecast');
-            break;
-        case 'dashboard':
-            sendMessage('get_dashboard_widgets');
-            initDashboardCharts();
-            break;
-    }
-}
-
-// ===== Data Warehouse Page =====
-function renderSalesTable(records) {
-    const tbody = document.getElementById('table-body');
-    if (!tbody) return;
-
-    tbody.innerHTML = records.map(record => `
-        <tr>
-            <td>📅 ${record.dateRange}</td>
-            <td style="color: var(--primary-dark); font-weight: 600;">$${record.salesVolume.toLocaleString()}</td>
-            <td>${record.records.toLocaleString()}</td>
-            <td>
-                <span class="badge ${record.status === 'Clean' ? 'badge-success' : 'badge-warning'}">
-                    ${record.status === 'Clean' ? '✓' : '⚠️'} ${record.status}
-                </span>
-            </td>
-            <td>${record.source}</td>
-            <td>
-                <span class="badge badge-blue">📍 ${record.region}</span>
-            </td>
-            <td style="color: var(--text-muted);">${record.lastUpdated}</td>
-        </tr>
-    `).join('');
-}
-
-function updateDataHealth(data) {
-    const scoreEl = document.getElementById('health-score');
-    const progressEl = document.getElementById('health-progress');
-    const recordsEl = document.getElementById('total-records');
-    const revenueEl = document.getElementById('total-revenue');
-
-    if (scoreEl) scoreEl.innerHTML = `${data.score}<span style="font-size: 1rem; color: var(--text-muted);">/100</span>`;
-    if (progressEl) progressEl.style.width = `${data.score}%`;
-    if (recordsEl) recordsEl.textContent = data.totalRecords.toLocaleString();
-    if (revenueEl) revenueEl.textContent = `$${data.totalRevenue}M`;
-}
-
-// ===== Forecast Page =====
-function updateForecast(data) {
-    const accuracyEl = document.getElementById('accuracy');
-    const confidenceEl = document.getElementById('confidence');
-
-    if (accuracyEl) accuracyEl.textContent = `${data.accuracy}%`;
-    if (confidenceEl) confidenceEl.textContent = `${data.confidence}%`;
-
-    renderForecastChart(data);
-}
-
-function renderForecastChart(data) {
-    const ctx = document.getElementById('forecast-chart');
-    if (!ctx) return;
-
-    // Destroy existing chart
-    if (charts.forecast) {
-        charts.forecast.destroy();
-    }
-
-    const allData = [...data.historical, ...data.forecast];
-    const labels = allData.map(d => d.month);
-    const values = allData.map(d => d.value / 1000); // Convert to thousands
-
-    // Split colors: historical vs forecast
-    const backgroundColors = allData.map(d =>
-        d.type === 'historical'
-            ? 'rgba(135, 206, 235, 0.7)'
-            : 'rgba(255, 182, 193, 0.7)'
-    );
-
-    charts.forecast = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Sales (thousands $)',
-                data: values,
-                backgroundColor: backgroundColors,
-                borderRadius: 6,
-                borderSkipped: false,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: '#2D3748',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    cornerRadius: 8,
-                    callbacks: {
-                        label: (context) => `$${context.raw.toFixed(0)}k`
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)'
-                    },
-                    ticks: {
-                        callback: (value) => `$${value}k`
-                    }
-                }
-            }
+// ===== Form Handling =====
+function collectFormData() {
+    const form = document.getElementById('assessment-form');
+    const formData = new FormData(form);
+    const data = {};
+    
+    // Collect all form fields
+    formData.forEach((value, key) => {
+        // Skip empty values - they will be filled with defaults in the model
+        if (value === '' || value === null) {
+            return;
+        }
+        
+        // Convert numeric fields
+        if (['Age', 'Height', 'Weight', 'Heart rate', 'Sleep duration', 
+             'Sleep quality', 'Stress level', 'Daily steps', 'Physical activity',
+             'Average screen time'].includes(key)) {
+            data[key] = parseFloat(value);
+        } else {
+            data[key] = value;
         }
     });
-}
-
-function generateForecast() {
-    const horizon = document.getElementById('time-horizon')?.value || 180;
-    sendMessage('get_forecast', { params: { horizon } });
-}
-
-// ===== Dashboard Page =====
-function initDashboardCharts() {
-    // Revenue Bar Chart
-    const revenueCtx = document.getElementById('revenue-chart');
-    if (revenueCtx && !charts.revenue) {
-        charts.revenue = new Chart(revenueCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: [45, 52, 48, 61, 55, 67],
-                    backgroundColor: [
-                        'rgba(135, 206, 235, 0.7)',
-                        'rgba(135, 206, 235, 0.8)',
-                        'rgba(135, 206, 235, 0.7)',
-                        'rgba(135, 206, 235, 0.9)',
-                        'rgba(135, 206, 235, 0.75)',
-                        'rgba(135, 206, 235, 1)',
-                    ],
-                    borderRadius: 8,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: {
-                        grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { callback: (v) => `$${v}k` }
-                    }
-                }
-            }
-        });
+    
+    // Create Blood pressure string from systolic/diastolic if provided
+    const systolic = document.getElementById('bp-systolic').value;
+    const diastolic = document.getElementById('bp-diastolic').value;
+    
+    if (systolic && diastolic) {
+        data['Blood pressure'] = `${systolic}/${diastolic}`;
+    } else if (systolic || diastolic) {
+        // If only one is provided, use default for the other
+        data['Blood pressure'] = `${systolic || '120'}/${diastolic || '80'}`;
     }
-
-    // Products Donut Chart
-    const productsCtx = document.getElementById('products-chart');
-    if (productsCtx && !charts.products) {
-        charts.products = new Chart(productsCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Product A', 'Product B', 'Product C', 'Product D'],
-                datasets: [{
-                    data: [35, 28, 22, 15],
-                    backgroundColor: [
-                        '#87CEEB',
-                        '#FFB6C1',
-                        '#E6E6FA',
-                        '#98FB98'
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '65%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 16,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    }
-                }
-            }
-        });
-    }
+    // If neither provided, don't include - model will use default
+    
+    // Remove the separate BP fields (not needed for model)
+    delete data['BP_Systolic'];
+    delete data['BP_Diastolic'];
+    
+    return data;
 }
 
-function renderDashboard(widgets) {
-    // Could dynamically render widgets here
-    initDashboardCharts();
+function validateForm() {
+    const form = document.getElementById('assessment-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return false;
+    }
+    return true;
+}
+
+function submitAssessment(event) {
+    event.preventDefault();
+    
+    if (!validateForm()) {
+        return;
+    }
+    
+    const data = collectFormData();
+    
+    // Show loading state
+    const submitBtn = document.querySelector('.form-actions .btn-primary');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Analyzing...';
+    submitBtn.disabled = true;
+    
+    // Send prediction request
+    sendMessage('predict_dry_eye', data);
+    
+    // Reset button after timeout (in case of error)
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }, 10000);
+}
+
+// ===== Results Display =====
+function displayResults(data) {
+    // Reset button
+    const submitBtn = document.querySelector('.form-actions .btn-primary');
+    submitBtn.textContent = 'Get My Risk Assessment';
+    submitBtn.disabled = false;
+    
+    // Update result values
+    document.getElementById('result-prediction').textContent = data.prediction;
+    document.getElementById('result-risk').textContent = data.risk_level;
+    
+    // Update probability
+    const probability = (data.probability * 100).toFixed(1);
+    document.getElementById('result-probability').textContent = `${probability}%`;
+    
+    // Animate probability bar
+    const probabilityFill = document.getElementById('probability-fill');
+    probabilityFill.style.width = '0%';
+    setTimeout(() => {
+        probabilityFill.style.width = `${probability}%`;
+    }, 100);
+    
+    // Set risk level color
+    const riskBadge = document.getElementById('result-risk');
+    riskBadge.className = 'result-value risk-badge';
+    
+    if (data.risk_level === 'Low Risk') {
+        riskBadge.classList.add('risk-low');
+        probabilityFill.className = 'probability-fill risk-low';
+    } else if (data.risk_level === 'Moderate Risk') {
+        riskBadge.classList.add('risk-moderate');
+        probabilityFill.className = 'probability-fill risk-moderate';
+    } else if (data.risk_level === 'High Risk') {
+        riskBadge.classList.add('risk-high');
+        probabilityFill.className = 'probability-fill risk-high';
+    } else {
+        riskBadge.classList.add('risk-very-high');
+        probabilityFill.className = 'probability-fill risk-very-high';
+    }
+    
+    // Hide form and show results
+    document.getElementById('assessment-form').classList.add('hidden');
+    document.getElementById('results-section').classList.remove('hidden');
+    
+    // Scroll to results
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetAssessment() {
+    // Show form and hide results
+    document.getElementById('assessment-form').classList.remove('hidden');
+    document.getElementById('results-section').classList.add('hidden');
+    
+    // Reset form
+    document.getElementById('assessment-form').reset();
+    
+    // Scroll to top of form
+    document.querySelector('.assessment-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showError(message) {
+    // Reset button
+    const submitBtn = document.querySelector('.form-actions .btn-primary');
+    if (submitBtn) {
+        submitBtn.textContent = 'Get My Risk Assessment';
+        submitBtn.disabled = false;
+    }
+    
+    alert(`Error: ${message}`);
 }
 
 // ===== Initialize =====
 document.addEventListener('DOMContentLoaded', () => {
     connectWebSocket();
-
-    // Load demo data if WebSocket fails
-    setTimeout(() => {
-        if (!ws || ws.readyState !== WebSocket.OPEN) {
-            loadDemoData();
-        }
-    }, 2000);
+    
+    // Setup form submission
+    const form = document.getElementById('assessment-form');
+    if (form) {
+        form.addEventListener('submit', submitAssessment);
+    }
 });
-
-// ===== Demo Data (fallback if no WebSocket) =====
-function loadDemoData() {
-    console.log('📊 Loading demo data...');
-
-    // Demo sales records
-    const demoRecords = [
-        { dateRange: 'Jan 2024 - Mar 2024', salesVolume: 245000, records: 1250, status: 'Clean', source: 'CSV Import', region: 'North America', lastUpdated: '2024-03-15' },
-        { dateRange: 'Oct 2023 - Dec 2023', salesVolume: 312500, records: 1580, status: 'Clean', source: 'Database Sync', region: 'South America', lastUpdated: '2023-12-31' },
-        { dateRange: 'Jul 2023 - Sep 2023', salesVolume: 189000, records: 980, status: 'Needs Review', source: 'Excel Upload', region: 'Europe', lastUpdated: '2023-09-30' },
-        { dateRange: 'Apr 2023 - Jun 2023', salesVolume: 267800, records: 1340, status: 'Clean', source: 'API Integration', region: 'Asia', lastUpdated: '2023-06-30' },
-    ];
-    renderSalesTable(demoRecords);
-
-    // Demo health data
-    updateDataHealth({ score: 87, totalRecords: 6270, totalRevenue: 12.4 });
-
-    // Demo forecast
-    const demoForecast = {
-        historical: [
-            { month: 'Jan', value: 280000, type: 'historical' },
-            { month: 'Feb', value: 295000, type: 'historical' },
-            { month: 'Mar', value: 310000, type: 'historical' },
-            { month: 'Apr', value: 340000, type: 'historical' },
-            { month: 'May', value: 360000, type: 'historical' },
-            { month: 'Jun', value: 385000, type: 'historical' },
-        ],
-        forecast: [
-            { month: 'Jul', value: 410000, type: 'forecast' },
-            { month: 'Aug', value: 435000, type: 'forecast' },
-            { month: 'Sep', value: 455000, type: 'forecast' },
-            { month: 'Oct', value: 480000, type: 'forecast' },
-            { month: 'Nov', value: 510000, type: 'forecast' },
-            { month: 'Dec', value: 545000, type: 'forecast' },
-        ],
-        accuracy: 94.2,
-        confidence: 89
-    };
-
-    if (currentPage === 'forecast') {
-        updateForecast(demoForecast);
-    }
-
-    if (currentPage === 'dashboard') {
-        initDashboardCharts();
-    }
-}

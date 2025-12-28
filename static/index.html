@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Transform your data into strategic predictions with AI-powered analytics and forecasting.">
-    <title>ForecastPro - Business Analytics & Forecasting Platform</title>
+    <meta name="description" content="AI-powered dry eye disease risk assessment using machine learning.">
+    <title>DryEye Predict - AI-Powered Eye Health Assessment</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="/css/style.css">
@@ -22,20 +19,16 @@
     <nav class="navbar">
         <div class="container">
             <a href="#" class="logo" onclick="showPage('home')">
-                <div class="logo-icon">📊</div>
-                <span>ForecastPro</span>
+                <span>DryEye Predict</span>
             </a>
             
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')" class="nav-link active" data-page="home">Home</a></li>
-                <li><a href="#" onclick="showPage('data')" class="nav-link" data-page="data">Data</a></li>
-                <li><a href="#" onclick="showPage('forecast')" class="nav-link" data-page="forecast">Forecast</a></li>
-                <li><a href="#" onclick="showPage('dashboard')" class="nav-link" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#" onclick="showPage('assessment')" class="nav-link" data-page="assessment">Assessment</a></li>
             </ul>
             
             <div class="nav-actions">
-                <button class="btn btn-ghost">Login</button>
-                <button class="btn btn-primary" onclick="showPage('data')">Get Started</button>
+                <button class="btn btn-primary" onclick="showPage('assessment')">Start Assessment</button>
             </div>
         </div>
     </nav>
@@ -45,389 +38,403 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <span class="hero-badge">
-                    ✨ AI-Powered Analytics
-                </span>
-                <h1>Transform Your Data into <span class="gradient-text">Strategic Predictions</span></h1>
-                <p>Empower your business with cutting-edge analytics to forecast trends, optimize strategies, and drive unparalleled growth.</p>
+                <span class="hero-badge">AI-Powered Health Assessment</span>
+                <h1>Assess Your <span class="gradient-text">Dry Eye Risk</span></h1>
+                <p>Get an instant, AI-powered assessment of your dry eye disease risk based on your lifestyle, health metrics, and symptoms.</p>
                 <div class="hero-actions">
-                    <button class="btn btn-primary" onclick="showPage('data')">
-                        Start Predicting Now →
+                    <button class="btn btn-primary" onclick="showPage('assessment')">
+                        Take the Assessment
                     </button>
-                    <button class="btn btn-outline" onclick="showPage('forecast')">
-                        See Demo
+                    <button class="btn btn-outline" onclick="document.getElementById('about-section').scrollIntoView({behavior: 'smooth'})">
+                        Learn More
                     </button>
-                </div>
-                
-                <!-- Visual Preview -->
-                <div class="hero-visual">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                        <span style="font-weight: 600;">Sales Forecast</span>
-                        <span class="badge badge-blue">XGBoost Model</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <div class="progress-bar"><div class="progress-fill blue" style="width: 85%;"></div></div>
-                        <div class="progress-bar"><div class="progress-fill pink" style="width: 70%;"></div></div>
-                        <div class="progress-bar"><div class="progress-fill blue" style="width: 92%;"></div></div>
-                        <div class="progress-bar"><div class="progress-fill pink" style="width: 65%;"></div></div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Features Section -->
-        <section class="features">
+        <!-- About Section -->
+        <section class="features" id="about-section">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-badge">💫 Powerful Features</span>
-                    <h2>Everything You Need to <span class="gradient-text">Predict Success</span></h2>
-                    <p style="color: var(--text-secondary); margin-top: 12px;">
-                        Comprehensive tools and insights to transform your forecasting
+                    <span class="section-badge">About Dry Eye Disease</span>
+                    <h2>Understanding <span class="gradient-text">Dry Eye Syndrome</span></h2>
+                    <p class="section-description">
+                        Dry eye disease is a common condition affecting millions worldwide, characterized by insufficient tear production or poor tear quality.
                     </p>
                 </div>
                 
                 <div class="features-grid">
                     <div class="card feature-card">
-                        <div class="card-icon blue">📁</div>
-                        <h3>Data Warehouse</h3>
-                        <p>Access, filter, and analyze your historical data with powerful tools for clarity and control.</p>
+                        <h3>Risk Factors</h3>
+                        <p>Extended screen time, poor sleep quality, contact lens use, aging, and certain medications can increase your risk of developing dry eye syndrome.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <div class="card-icon pink">🔮</div>
-                        <h3>AI Forecasting</h3>
-                        <p>Get precise, data-driven forecasts with confidence intervals and customizable models.</p>
+                        <h3>Common Symptoms</h3>
+                        <p>Symptoms include eye discomfort, burning sensation, redness, light sensitivity, blurred vision, and a gritty feeling in the eyes.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <div class="card-icon green">📊</div>
-                        <h3>Visualizations</h3>
-                        <p>Choose from bar, line, and area charts, each optimized for different data insights.</p>
+                        <h3>Prevention</h3>
+                        <p>Regular breaks from screens, adequate hydration, proper sleep, and using blue-light filters can help reduce your risk of dry eye disease.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <div class="card-icon purple">🎨</div>
-                        <h3>Dashboard Builder</h3>
-                        <p>Create custom dashboards by arranging widgets and charts exactly how you need them.</p>
+                        <h3>Our AI Model</h3>
+                        <p>Our XGBoost machine learning model analyzes 25+ health and lifestyle factors to provide an accurate risk assessment for dry eye disease.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">Simple Process</span>
+                    <h2>How It <span class="gradient-text">Works</span></h2>
+                </div>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Enter Your Information</h3>
+                        <p>Fill out a comprehensive health questionnaire covering your personal info, lifestyle habits, and current symptoms.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>AI Analysis</h3>
+                        <p>Our machine learning model processes your data using advanced algorithms trained on clinical datasets.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Get Your Results</h3>
+                        <p>Receive an instant risk assessment with probability score and personalized risk level classification.</p>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- ===== DATA WAREHOUSE PAGE ===== -->
-    <div id="page-data" class="page">
+    <!-- ===== ASSESSMENT PAGE ===== -->
+    <div id="page-assessment" class="page">
         <section class="page-header">
             <div class="container">
-                <span class="section-badge">📁 Data Management</span>
-                <h1>Manage & Explore Your <span class="gradient-text">Data Warehouse</span></h1>
-                <p>Access, filter, and analyze your historical sales data with powerful tools.</p>
+                <span class="section-badge">Health Assessment</span>
+                <h1>Dry Eye Risk <span class="gradient-text">Assessment</span></h1>
+                <p>Complete the form below to receive your personalized dry eye disease risk assessment.</p>
             </div>
         </section>
         
-        <section style="padding: 40px 0;">
+        <section class="assessment-section">
             <div class="container">
-                <!-- Stats Row -->
-                <div class="stats-row">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Data Health Score</span>
-                            <div class="card-icon green">✓</div>
+                <form id="assessment-form" class="assessment-form">
+                    <!-- Section 1: Personal Information -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Personal Information</h2>
+                            <p>Basic demographic and health metrics</p>
                         </div>
-                        <div class="metric-value green" id="health-score">87<span style="font-size: 1rem; color: var(--text-muted);">/100</span></div>
-                        <div class="progress-bar">
-                            <div class="progress-fill blue" id="health-progress" style="width: 87%;"></div>
-                        </div>
-                        <div class="metric-label">Excellent data quality</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Total Records</span>
-                            <div class="card-icon blue">📋</div>
-                        </div>
-                        <div class="metric-value blue" id="total-records">6,270</div>
-                        <div class="metric-label">Across all data sources</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Total Revenue</span>
-                            <div class="card-icon pink">📈</div>
-                        </div>
-                        <div class="metric-value pink" id="total-revenue">$12.4M</div>
-                        <div class="metric-label">Historical sales value</div>
-                    </div>
-                </div>
-                
-                <!-- Filters -->
-                <div class="filters-bar">
-                    <div class="input-group">
-                        <span class="input-icon">🔍</span>
-                        <input type="text" class="input has-icon" placeholder="Search by date range, source, or region...">
-                    </div>
-                    <select class="input select filter-select">
-                        <option>All Status</option>
-                        <option>Clean</option>
-                        <option>Needs Review</option>
-                    </select>
-                    <select class="input select filter-select">
-                        <option>All Regions</option>
-                        <option>North America</option>
-                        <option>Europe</option>
-                        <option>Asia</option>
-                    </select>
-                    <button class="btn btn-ghost">🔄 Refresh</button>
-                    <button class="btn btn-ghost">⬇️ Export</button>
-                </div>
-                
-                <!-- Data Table -->
-                <div class="table-container">
-                    <table class="data-table" id="data-table">
-                        <thead>
-                            <tr>
-                                <th>Date Range</th>
-                                <th>Sales Volume</th>
-                                <th>Records</th>
-                                <th>Status</th>
-                                <th>Source</th>
-                                <th>Region</th>
-                                <th>Last Updated</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <!-- Rows populated via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ===== FORECAST PAGE ===== -->
-    <div id="page-forecast" class="page">
-        <section class="page-header">
-            <div class="container">
-                <span class="section-badge">🔮 AI-Powered Predictions</span>
-                <h1>Accurate Sales Forecasting <span class="gradient-text">Powered by AI</span></h1>
-                <p>Get precise, data-driven forecasts with confidence intervals and customizable models.</p>
-            </div>
-        </section>
-        
-        <section style="padding: 40px 0;">
-            <div class="container">
-                <!-- Forecast Stats -->
-                <div class="stats-row" style="margin-bottom: 32px;">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Prediction Accuracy</span>
-                            <div class="card-icon pink">🎯</div>
-                        </div>
-                        <div class="metric-value pink" id="accuracy">94.2%</div>
-                        <div class="metric-label">Based on historical validation</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Confidence Level</span>
-                            <div class="card-icon blue">⚡</div>
-                        </div>
-                        <div class="metric-value blue" id="confidence">89%</div>
-                        <div class="metric-label">95% confidence interval</div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-title">Forecast Period</span>
-                            <div class="card-icon green">📅</div>
-                        </div>
-                        <div class="metric-value" id="period">6 <span style="font-size: 1rem;">months</span></div>
-                        <div class="metric-label">Jul 2024 - Dec 2024</div>
-                    </div>
-                </div>
-                
-                <!-- Main Content Grid -->
-                <div style="display: grid; grid-template-columns: 1fr 320px; gap: 24px;">
-                    <!-- Chart Area -->
-                    <div class="card">
-                        <div class="chart-header">
-                            <div>
-                                <h3>Sales Forecast</h3>
-                                <p style="color: var(--text-muted); font-size: 0.875rem;">Historical data vs. AI predictions (in thousands $)</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="Gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                </select>
                             </div>
-                            <div class="chart-actions">
-                                <button class="btn btn-ghost">⬇️</button>
-                                <button class="btn btn-ghost">🔄</button>
+                            
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" id="age" name="Age" min="18" max="100" placeholder="18-100" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" id="height" name="Height" min="100" max="250" placeholder="150-200" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="Weight" min="30" max="200" placeholder="50-100" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bp-systolic">Blood Pressure (Systolic) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="number" id="bp-systolic" name="BP_Systolic" min="80" max="200" placeholder="Default: 120">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bp-diastolic">Blood Pressure (Diastolic) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="number" id="bp-diastolic" name="BP_Diastolic" min="50" max="130" placeholder="Default: 80">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="heart-rate">Heart Rate (bpm) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="number" id="heart-rate" name="Heart rate" min="40" max="150" placeholder="Default: 75">
                             </div>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="forecast-chart"></canvas>
+                    </div>
+                    
+                    <!-- Section 2: Sleep Health -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Sleep Health</h2>
+                            <p>Your sleep patterns and quality</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="sleep-duration">Sleep Duration (hours)</label>
+                                <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" placeholder="4-10" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sleep-quality">Sleep Quality (1-5)</label>
+                                <select id="sleep-quality" name="Sleep quality" required>
+                                    <option value="">Select quality</option>
+                                    <option value="1">1 - Very Poor</option>
+                                    <option value="2">2 - Poor</option>
+                                    <option value="3">3 - Average</option>
+                                    <option value="4">4 - Good</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sleep-disorder">Sleep Disorder</label>
+                                <select id="sleep-disorder" name="Sleep disorder" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wake-up-night">Wake Up During Night</label>
+                                <select id="wake-up-night" name="Wake up during night" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="sleepy-day">Feel Sleepy During Day</label>
+                                <select id="sleepy-day" name="Feel sleepy during day" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Settings Panel -->
-                    <div class="settings-panel">
-                        <div class="settings-title">
-                            ⚙️ Prediction Settings
+                    <!-- Section 3: Lifestyle -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Lifestyle</h2>
+                            <p>Daily habits and activity levels</p>
                         </div>
                         
-                        <div class="setting-group">
-                            <label class="setting-label">Time Horizon</label>
-                            <select class="input select" id="time-horizon">
-                                <option value="1">1 day</option>
-                                <option value="7">1 week</option>
-                                <option value="30">1 month</option>
-                                <option value="90">3 months</option>
-                                <option value="180" selected>6 months</option>
-                            </select>
-                            <span class="setting-help">How far ahead to forecast</span>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="stress-level">Stress Level (1-5)</label>
+                                <select id="stress-level" name="Stress level" required>
+                                    <option value="">Select level</option>
+                                    <option value="1">1 - Very Low</option>
+                                    <option value="2">2 - Low</option>
+                                    <option value="3">3 - Moderate</option>
+                                    <option value="4">4 - High</option>
+                                    <option value="5">5 - Very High</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="daily-steps">Daily Steps <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="number" id="daily-steps" name="Daily steps" min="0" max="50000" placeholder="Default: 8000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="physical-activity">Physical Activity (min/day) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
+                                <input type="number" id="physical-activity" name="Physical activity" min="0" max="300" placeholder="Default: 30">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="caffeine">Caffeine Consumption</label>
+                                <select id="caffeine" name="Caffeine consumption" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="alcohol">Alcohol Consumption</label>
+                                <select id="alcohol" name="Alcohol consumption" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="smoking">Smoking</label>
+                                <select id="smoking" name="Smoking" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 4: Screen Usage -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Screen Usage</h2>
+                            <p>Digital device habits</p>
                         </div>
                         
-                        <div class="setting-group">
-                            <label class="setting-label">City</label>
-                            <select class="input select">
-                                <option>All Cities</option>
-                                <option>New York</option>
-                                <option>Los Angeles</option>
-                                <option>Chicago</option>
-                            </select>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="screen-time">Average Screen Time (hours/day)</label>
+                                <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" placeholder="1-10" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="smart-device">Smart Device Before Bed</label>
+                                <select id="smart-device" name="Smart device before bed" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="blue-light">Blue-Light Filter</label>
+                                <select id="blue-light" name="Blue-light filter" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No (not using)</option>
+                                    <option value="Y">Yes (using)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 5: Medical History -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Medical History</h2>
+                            <p>Current health conditions</p>
                         </div>
                         
-                        <div class="setting-group">
-                            <label class="setting-label">Store</label>
-                            <select class="input select">
-                                <option>All Stores</option>
-                                <option>Store #1</option>
-                                <option>Store #2</option>
-                            </select>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="medical-issue">Existing Medical Issues</label>
+                                <select id="medical-issue" name="Medical issue" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medication">Currently on Medication</label>
+                                <select id="medication" name="Ongoing medication" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 6: Eye Symptoms -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Eye Symptoms</h2>
+                            <p>Current eye-related symptoms</p>
                         </div>
                         
-                        <div class="setting-group">
-                            <label class="setting-label">Product</label>
-                            <select class="input select">
-                                <option>All Products</option>
-                                <option>Electronics</option>
-                                <option>Clothing</option>
-                            </select>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="eye-strain">Discomfort / Eye-strain</label>
+                                <select id="eye-strain" name="Discomfort Eye-strain" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="redness">Redness in Eyes</label>
+                                <select id="redness" name="Redness in eye" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="itchiness">Itchiness / Irritation</label>
+                                <select id="itchiness" name="Itchiness/Irritation in eye" required>
+                                    <option value="">Select option</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
                         </div>
-                        
-                        <button class="btn btn-secondary" style="width: 100%;" onclick="generateForecast()">
-                            📊 Generate Forecast
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Get My Risk Assessment
                         </button>
-                        
-                        <div class="setting-group" style="margin-top: 24px;">
-                            <label class="setting-label">Model Sensitivity</label>
-                            <select class="input select">
-                                <option>Conservative</option>
-                                <option selected>Balanced</option>
-                                <option>Aggressive</option>
-                            </select>
-                            <span class="setting-help">Lower risk, narrower predictions</span>
-                        </div>
+                        <button type="reset" class="btn btn-outline">
+                            Clear Form
+                        </button>
                     </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ===== DASHBOARD PAGE ===== -->
-    <div id="page-dashboard" class="page">
-        <section class="page-header">
-            <div class="container">
-                <span class="section-badge">🎨 Dashboard Builder</span>
-                <h1>Drag-and-Drop <span class="gradient-text">Dashboard Builder</span></h1>
-                <p>Create custom dashboards by arranging widgets, charts, and data views.</p>
-            </div>
-        </section>
-        
-        <section style="padding: 40px 0;">
-            <div class="container">
-                <!-- Dashboard Header -->
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-                    <h2>Sales Performance Dashboard</h2>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-ghost">↗️ Share</button>
-                        <button class="btn btn-ghost">⬇️ Export</button>
-                        <button class="btn btn-primary">+ Add Widget</button>
-                    </div>
-                </div>
+                </form>
                 
-                <!-- Dashboard Grid -->
-                <div class="dashboard-grid">
-                    <!-- Revenue Chart Widget -->
-                    <div class="widget widget-lg">
-                        <div class="widget-header">
-                            <span class="widget-title">Revenue Overview</span>
-                            <button class="btn btn-ghost" style="padding: 4px 8px;">⬆️ Upload</button>
+                <!-- Results Section (Hidden by default) -->
+                <div id="results-section" class="results-section hidden">
+                    <div class="results-card">
+                        <div class="results-header">
+                            <h2>Your Assessment Results</h2>
+                            <p>Based on your responses, our AI model has analyzed your dry eye disease risk.</p>
                         </div>
-                        <div class="widget-body">
-                            <div class="chart-container" style="height: 250px;">
-                                <canvas id="revenue-chart"></canvas>
+                        
+                        <div class="results-body">
+                            <div class="result-item">
+                                <span class="result-label">Prediction</span>
+                                <span class="result-value" id="result-prediction">-</span>
+                            </div>
+                            
+                            <div class="result-item">
+                                <span class="result-label">Risk Level</span>
+                                <span class="result-value risk-badge" id="result-risk">-</span>
+                            </div>
+                            
+                            <div class="result-item probability-item">
+                                <span class="result-label">Risk Probability</span>
+                                <div class="probability-display">
+                                    <div class="probability-bar">
+                                        <div class="probability-fill" id="probability-fill"></div>
+                                    </div>
+                                    <span class="probability-value" id="result-probability">0%</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Donut Chart Widget -->
-                    <div class="widget widget-lg">
-                        <div class="widget-header">
-                            <span class="widget-title">Top Products</span>
-                            <div class="card-icon purple" style="width: 28px; height: 28px; font-size: 14px;">🕐</div>
-                        </div>
-                        <div class="widget-body">
-                            <div class="chart-container" style="height: 250px;">
-                                <canvas id="products-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Chart Type Cards -->
-                    <div class="widget widget-md">
-                        <div class="widget-header">
-                            <span class="widget-title">Bar Chart</span>
-                            <div class="card-icon blue" style="width: 28px; height: 28px; font-size: 14px;">📊</div>
-                        </div>
-                        <div class="widget-body">
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Compare values across categories</p>
-                            <div style="display: flex; gap: 8px; height: 80px; align-items: flex-end;">
-                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 60%;"></div>
-                                <div style="flex: 1; background: var(--primary-light); border-radius: 4px; height: 80%;"></div>
-                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 45%;"></div>
-                                <div style="flex: 1; background: var(--primary-light); border-radius: 4px; height: 90%;"></div>
-                                <div style="flex: 1; background: var(--primary); border-radius: 4px; height: 70%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="widget widget-md">
-                        <div class="widget-header">
-                            <span class="widget-title">Line Chart</span>
-                            <div class="card-icon pink" style="width: 28px; height: 28px; font-size: 14px;">📈</div>
-                        </div>
-                        <div class="widget-body">
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Track trends over time</p>
-                            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
-                                <path d="M0,60 Q50,20 100,40 T200,20" fill="none" stroke="var(--secondary)" stroke-width="3"/>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div class="widget widget-md">
-                        <div class="widget-header">
-                            <span class="widget-title">Area Chart</span>
-                            <div class="card-icon green" style="width: 28px; height: 28px; font-size: 14px;">📉</div>
-                        </div>
-                        <div class="widget-body">
-                            <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 16px;">Show cumulative data trends</p>
-                            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
-                                <defs>
-                                    <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style="stop-color:var(--accent-mint);stop-opacity:0.5" />
-                                        <stop offset="100%" style="stop-color:var(--accent-mint);stop-opacity:0" />
-                                    </linearGradient>
-                                </defs>
-                                <path d="M0,60 Q50,30 100,45 T200,25 L200,80 L0,80 Z" fill="url(#areaGrad)"/>
-                                <path d="M0,60 Q50,30 100,45 T200,25" fill="none" stroke="var(--accent-mint)" stroke-width="2"/>
-                            </svg>
+                        
+                        <div class="results-footer">
+                            <p class="disclaimer">This assessment is for informational purposes only and should not replace professional medical advice. Please consult an eye care specialist for a comprehensive evaluation.</p>
+                            <button class="btn btn-outline" onclick="resetAssessment()">Take Another Assessment</button>
                         </div>
                     </div>
                 </div>
