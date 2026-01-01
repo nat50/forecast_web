@@ -1,29 +1,34 @@
-# DryEye Predict - Dry Eye Disease Risk Assessment
+# Healthcatchers - Health Assessment Platform
 
-Web application for dry eye disease risk prediction using XGBoost machine learning model.
+Web application for comprehensive health assessment including dry eye disease prediction, BMI analysis, blood pressure monitoring, sleep quality, and lifestyle evaluation.
 
 ## Features
 
-- Real-time risk assessment through web interface
-- 25-field health questionnaire with flexible input
-- 4-level risk classification (Low, Moderate, High, Very High)
-- Professional medical-themed UI
+- **Multi-health Assessment**: One form, multiple health reports
+- **AI-powered Dry Eye Prediction**: XGBoost model trained on 20,000+ samples
+- **BMI Analysis**: Body mass index calculation and classification
+- **Blood Pressure Monitoring**: Hypertension risk detection
+- **Sleep Health Evaluation**: Sleep duration and quality assessment
+- **Lifestyle Analysis**: Activity, habits, and risk factor scoring
+- **Real-time Results**: WebSocket-based instant feedback
 
 ## Project Structure
 
 ```
 forecast_web/
-├── server.py                    # Web server
-├── requirements.txt             # Dependencies
+├── server.py                    # Main web server
+├── requirements.txt             # Python dependencies
+├── services/
+│   ├── __init__.py
+│   └── health_analyzer.py       # Multi-health analysis service
 ├── model/
-│   ├── dry_eye_xgboost.ipynb   # Training notebook
-│   ├── predict_explain.py       # Prediction API
+│   ├── predict_explain.py       # Dry eye prediction API
 │   ├── xgboost_dry_eye_model.joblib
-│   └── Dry Eye Disease/Dry_Eye_Dataset.csv
+│   └── Dry Eye Disease/         # Training dataset
 └── static/
-    ├── index.html
-    ├── css/style.css
-    └── js/app.js
+    ├── index.html               # Main SPA
+    ├── css/style.css            # Styles
+    └── js/app.js                # Frontend logic
 ```
 
 ## Quick Start
@@ -33,70 +38,42 @@ forecast_web/
 pip install -r requirements.txt
 ```
 
-**Run the web application:**
+**Run the application:**
 ```bash
 python server.py
 ```
 
+**With virtual environment:**
+```bash
+.\venv\Scripts\python.exe server.py
+```
+
 Open browser: `http://127.0.0.1:9000`
 
-**Custom server configuration:**
-```bash
-python server.py --server-ip 0.0.0.0 --server-port 8080
-```
+## Health Reports
 
-## Training Model
+### Basic Reports (Required Fields)
+- **BMI**: Weight status classification
+- **Sleep**: Duration and quality assessment
+- **Stress**: Mental health indicator
+- **Dry Eye**: AI prediction with probability
 
-**Open training notebook:**
-```bash
-cd model
-jupyter notebook dry_eye_xgboost.ipynb
-```
-
-The notebook includes data exploration, feature engineering, model training, evaluation, and SHAP analysis. After training, the new model file `xgboost_dry_eye_model.joblib` will be used automatically by the web app.
+### Advanced Reports (Optional Fields)
+- **Blood Pressure**: Hypertension risk levels
+- **Cardiovascular**: Heart rate analysis
+- **Advanced Sleep**: Sleep disorders detection
+- **Lifestyle**: Activity and habits scoring
 
 ## Technology Stack
 
 - **Backend**: Python, aiohttp, WebSocket
-- **ML**: XGBoost, scikit-learn, pandas, SHAP
-- **Frontend**: HTML5/CSS3/JavaScript
+- **ML Model**: XGBoost, scikit-learn, SHAP
+- **Frontend**: HTML5, CSS3, JavaScript
 
-## Model Details
+## Medical Disclaimer
 
-See [model/README_Dry_Eye.md](model/README_Dry_Eye.md) for technical documentation.
-- WebSocket API client
-- Responsive design
+This AI-powered assessment is for **reference purposes only** and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for any health concerns.
 
-## ⚠️ Medical Disclaimer
-
-This tool is for **informational and educational purposes only**. It should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified eye care specialist for:
-- Comprehensive eye examinations
-- Accurate diagnosis of eye conditions
-- Personalized treatment recommendations
-- Management of dry eye disease
-
-## 📖 Documentation
-
-- [Main README](README.md) - This file, project overview
-- [Model Documentation](model/README_Dry_Eye.md) - Detailed model information, features, and variables
-
-## 📄 License
+## License
 
 MIT License - Free for educational and research purposes
-
-## 🤝 Contributing
-
-This is an educational project. Feel free to:
-- Experiment with different ML models
-- Improve the web interface
-- Add new features or visualizations
-- Enhance model interpretability
-
-## 📧 Support
-
-For issues or questions about:
-- **Running the application** - Check the Quick Start section
-- **Training the model** - See the Jupyter notebook comments
-- **Understanding features** - Review the model documentation
-
-
