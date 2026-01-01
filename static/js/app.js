@@ -1,5 +1,5 @@
 /**
- * DryEye Predict - AI-Powered Eye Health Assessment
+ * Healthcatchers - Health Assessment Platform
  * Main JavaScript Application
  */
 
@@ -14,38 +14,41 @@ let currentPage = 'home';
 function connectWebSocket() {
     ws = new WebSocket(WS_URL);
 
-    ws.onopen = () => {
-        console.log('WebSocket connected');
+    ws.onopen = function () {
+        console.log('Connected to Healthcatchers');
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = function (event) {
         const response = JSON.parse(event.data);
         handleWebSocketMessage(response);
     };
 
-    ws.onerror = (error) => {
+    ws.onerror = function (error) {
         console.error('WebSocket error:', error);
     };
 
-    ws.onclose = () => {
-        console.log('WebSocket disconnected, reconnecting...');
+    ws.onclose = function () {
+        console.log('Disconnected, reconnecting...');
         setTimeout(connectWebSocket, 3000);
     };
 }
 
-function sendMessage(action, data = {}) {
+function sendMessage(action, data) {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ action, data }));
+        ws.send(JSON.stringify({ action: action, data: data }));
     } else {
         console.error('WebSocket not connected');
-        showError('Connection error. Please refresh the page.');
+        showError('Connection error. Please reload the page.');
     }
 }
 
 function handleWebSocketMessage(response) {
     switch (response.action) {
+        case 'health_result':
+            displayHealthResults(response.data);
+            break;
         case 'prediction_result':
-            displayResults(response.data);
+            displayDryEyeOnly(response.data);
             break;
         case 'error':
             showError(response.data.message);
@@ -55,19 +58,16 @@ function handleWebSocketMessage(response) {
 
 // ===== Page Navigation =====
 function showPage(pageName) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => {
+    document.querySelectorAll('.page').forEach(function (page) {
         page.classList.remove('active');
     });
 
-    // Show selected page
-    const page = document.getElementById(`page-${pageName}`);
+    const page = document.getElementById('page-' + pageName);
     if (page) {
         page.classList.add('active');
     }
 
-    // Update nav links
-    document.querySelectorAll('.nav-link').forEach(link => {
+    document.querySelectorAll('.nav-link').forEach(function (link) {
         link.classList.remove('active');
         if (link.dataset.page === pageName) {
             link.classList.add('active');
@@ -75,9 +75,21 @@ function showPage(pageName) {
     });
 
     currentPage = pageName;
-    
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Optional Section Toggle =====
+function toggleOptional() {
+    const content = document.getElementById('optional-content');
+    const icon = document.getElementById('expand-icon');
+
+    if (content.classList.contains('show')) {
+        content.classList.remove('show');
+        icon.classList.remove('expanded');
+    } else {
+        content.classList.add('show');
+        icon.classList.add('expanded');
+    }
 }
 
 // ===== Form Handling =====
@@ -85,40 +97,36 @@ function collectFormData() {
     const form = document.getElementById('assessment-form');
     const formData = new FormData(form);
     const data = {};
-    
-    // Collect all form fields
-    formData.forEach((value, key) => {
-        // Skip empty values - they will be filled with defaults in the model
+
+    formData.forEach(function (value, key) {
         if (value === '' || value === null) {
             return;
         }
-        
-        // Convert numeric fields
-        if (['Age', 'Height', 'Weight', 'Heart rate', 'Sleep duration', 
-             'Sleep quality', 'Stress level', 'Daily steps', 'Physical activity',
-             'Average screen time'].includes(key)) {
+
+        const numericFields = [
+            'Age', 'Height', 'Weight', 'Heart rate',
+            'Sleep duration', 'Sleep quality', 'Stress level',
+            'Daily steps', 'Physical activity', 'Average screen time'
+        ];
+
+        if (numericFields.indexOf(key) !== -1) {
             data[key] = parseFloat(value);
         } else {
             data[key] = value;
         }
     });
-    
-    // Create Blood pressure string from systolic/diastolic if provided
-    const systolic = document.getElementById('bp-systolic').value;
-    const diastolic = document.getElementById('bp-diastolic').value;
-    
-    if (systolic && diastolic) {
-        data['Blood pressure'] = `${systolic}/${diastolic}`;
-    } else if (systolic || diastolic) {
-        // If only one is provided, use default for the other
-        data['Blood pressure'] = `${systolic || '120'}/${diastolic || '80'}`;
+
+    const systolic = document.getElementById('bp-systolic');
+    const diastolic = document.getElementById('bp-diastolic');
+
+    // Only process if the old separate fields exist (backwards compatibility)
+    if (systolic && diastolic && systolic.value && diastolic.value) {
+        data['Blood pressure'] = systolic.value + '/' + diastolic.value;
     }
-    // If neither provided, don't include - model will use default
-    
-    // Remove the separate BP fields (not needed for model)
+
     delete data['BP_Systolic'];
     delete data['BP_Diastolic'];
-    
+
     return data;
 }
 
@@ -133,105 +141,174 @@ function validateForm() {
 
 function submitAssessment(event) {
     event.preventDefault();
-    
+
     if (!validateForm()) {
         return;
     }
-    
+
     const data = collectFormData();
-    
-    // Show loading state
+
     const submitBtn = document.querySelector('.form-actions .btn-primary');
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Analyzing...';
     submitBtn.disabled = true;
-    
-    // Send prediction request
-    sendMessage('predict_dry_eye', data);
-    
-    // Reset button after timeout (in case of error)
-    setTimeout(() => {
+
+    sendMessage('health_check', data);
+
+    setTimeout(function () {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
-    }, 10000);
+    }, 15000);
 }
 
 // ===== Results Display =====
-function displayResults(data) {
-    // Reset button
-    const submitBtn = document.querySelector('.form-actions .btn-primary');
-    submitBtn.textContent = 'Get My Risk Assessment';
-    submitBtn.disabled = false;
-    
-    // Update result values
-    document.getElementById('result-prediction').textContent = data.prediction;
-    document.getElementById('result-risk').textContent = data.risk_level;
-    
-    // Update probability
-    const probability = (data.probability * 100).toFixed(1);
-    document.getElementById('result-probability').textContent = `${probability}%`;
-    
-    // Animate probability bar
-    const probabilityFill = document.getElementById('probability-fill');
-    probabilityFill.style.width = '0%';
-    setTimeout(() => {
-        probabilityFill.style.width = `${probability}%`;
-    }, 100);
-    
-    // Set risk level color
-    const riskBadge = document.getElementById('result-risk');
-    riskBadge.className = 'result-value risk-badge';
-    
-    if (data.risk_level === 'Low Risk') {
-        riskBadge.classList.add('risk-low');
-        probabilityFill.className = 'probability-fill risk-low';
-    } else if (data.risk_level === 'Moderate Risk') {
-        riskBadge.classList.add('risk-moderate');
-        probabilityFill.className = 'probability-fill risk-moderate';
-    } else if (data.risk_level === 'High Risk') {
-        riskBadge.classList.add('risk-high');
-        probabilityFill.className = 'probability-fill risk-high';
-    } else {
-        riskBadge.classList.add('risk-very-high');
-        probabilityFill.className = 'probability-fill risk-very-high';
-    }
-    
-    // Hide form and show results
+function displayHealthResults(data) {
+    resetButton();
+
+    const healthAnalysis = data.health_analysis;
+    const dryEye = data.dry_eye;
+
+    displaySummary(healthAnalysis.summary);
+    displayHealthCards(healthAnalysis.basic_reports, healthAnalysis.advanced_reports);
+    displayDryEye(dryEye);
+    displayRecommendations(healthAnalysis.summary.top_recommendations);
+
     document.getElementById('assessment-form').classList.add('hidden');
     document.getElementById('results-section').classList.remove('hidden');
-    
-    // Scroll to results
     document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
 }
 
+function displaySummary(summary) {
+    const summaryMessage = document.getElementById('summary-message');
+    summaryMessage.textContent = summary.overall_message;
+    summaryMessage.className = 'summary-value ' + summary.overall_status;
+}
+
+function displayHealthCards(basicReports, advancedReports) {
+    const container = document.getElementById('health-cards');
+    container.innerHTML = '';
+
+    const allReports = basicReports.concat(advancedReports);
+
+    allReports.forEach(function (report) {
+        const card = createHealthCard(report);
+        container.appendChild(card);
+    });
+}
+
+function createHealthCard(report) {
+    const card = document.createElement('div');
+    card.className = 'health-card';
+
+    const statusText = getStatusText(report.status);
+
+    card.innerHTML =
+        '<div class="health-card-header">' +
+        '<span class="health-card-name">' + report.name + '</span>' +
+        '<span class="health-card-status ' + report.status + '">' + statusText + '</span>' +
+        '</div>' +
+        '<div class="health-card-value">' + report.value + '</div>' +
+        '<div class="health-card-message">' + report.message + '</div>';
+
+    return card;
+}
+
+function getStatusText(status) {
+    switch (status) {
+        case 'good': return 'Good';
+        case 'warning': return 'Warning';
+        case 'danger': return 'Danger';
+        default: return 'Unknown';
+    }
+}
+
+function displayDryEye(dryEye) {
+    document.getElementById('dry-eye-prediction').textContent =
+        dryEye.prediction === 'Dry Eye Disease' ? 'Dry Eye Risk Detected' : 'No Dry Eye Risk';
+
+    const riskBadge = document.getElementById('dry-eye-risk');
+    riskBadge.textContent = dryEye.risk_level;
+    riskBadge.className = 'result-value risk-badge ' + getRiskClass(dryEye.risk_level);
+
+    const probability = (dryEye.probability * 100).toFixed(1);
+    document.getElementById('dry-eye-probability').textContent = probability + '%';
+
+    const probabilityFill = document.getElementById('probability-fill');
+    probabilityFill.style.width = '0%';
+    probabilityFill.className = 'probability-fill ' + getRiskClass(dryEye.risk_level);
+
+    setTimeout(function () {
+        probabilityFill.style.width = probability + '%';
+    }, 100);
+}
+
+function getRiskClass(level) {
+    switch (level) {
+        case 'Low Risk': return 'risk-low';
+        case 'Moderate Risk': return 'risk-moderate';
+        case 'High Risk': return 'risk-high';
+        case 'Very High Risk': return 'risk-very-high';
+        default: return '';
+    }
+}
+
+function displayRecommendations(recommendations) {
+    const list = document.getElementById('recommendations-list');
+    list.innerHTML = '';
+
+    if (!recommendations || recommendations.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Maintain your current healthy lifestyle.';
+        list.appendChild(li);
+        return;
+    }
+
+    recommendations.forEach(function (rec) {
+        const li = document.createElement('li');
+        li.textContent = rec;
+        list.appendChild(li);
+    });
+}
+
+function displayDryEyeOnly(dryEye) {
+    resetButton();
+    displayDryEye(dryEye);
+
+    document.getElementById('assessment-form').classList.add('hidden');
+    document.getElementById('results-section').classList.remove('hidden');
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetButton() {
+    const submitBtn = document.querySelector('.form-actions .btn-primary');
+    if (submitBtn) {
+        submitBtn.textContent = 'Check My Health';
+        submitBtn.disabled = false;
+    }
+}
+
 function resetAssessment() {
-    // Show form and hide results
     document.getElementById('assessment-form').classList.remove('hidden');
     document.getElementById('results-section').classList.add('hidden');
-    
-    // Reset form
     document.getElementById('assessment-form').reset();
-    
-    // Scroll to top of form
+
+    const content = document.getElementById('optional-content');
+    const icon = document.getElementById('expand-icon');
+    if (content) content.classList.remove('show');
+    if (icon) icon.classList.remove('expanded');
+
     document.querySelector('.assessment-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function showError(message) {
-    // Reset button
-    const submitBtn = document.querySelector('.form-actions .btn-primary');
-    if (submitBtn) {
-        submitBtn.textContent = 'Get My Risk Assessment';
-        submitBtn.disabled = false;
-    }
-    
-    alert(`Error: ${message}`);
+    resetButton();
+    alert('Error: ' + message);
 }
 
 // ===== Initialize =====
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
     connectWebSocket();
-    
-    // Setup form submission
+
     const form = document.getElementById('assessment-form');
     if (form) {
         form.addEventListener('submit', submitAssessment);

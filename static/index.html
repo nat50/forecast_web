@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI-powered dry eye disease risk assessment using machine learning.">
-    <title>DryEye Predict - AI-Powered Eye Health Assessment</title>
+    <meta name="description" content="Healthcatchers - Comprehensive Health Assessment Platform">
+    <title>Healthcatchers - Health Assessment</title>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <a href="#" class="logo" onclick="showPage('home')">
-                <span>DryEye Predict</span>
+                <span>Healthcatchers</span>
             </a>
             
             <ul class="nav-links">
@@ -33,17 +30,16 @@
         </div>
     </nav>
 
-    <!-- ===== HOME PAGE ===== -->
+    <!-- HOME PAGE -->
     <div id="page-home" class="page active">
-        <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <span class="hero-badge">AI-Powered Health Assessment</span>
-                <h1>Assess Your <span class="gradient-text">Dry Eye Risk</span></h1>
-                <p>Get an instant, AI-powered assessment of your dry eye disease risk based on your lifestyle, health metrics, and symptoms.</p>
+                <span class="hero-badge">Health Assessment Platform</span>
+                <h1>Check Your <span class="gradient-text">Health</span> Status</h1>
+                <p>Comprehensive health assessment from basic metrics: BMI, blood pressure, sleep quality, eye health and lifestyle factors.</p>
                 <div class="hero-actions">
                     <button class="btn btn-primary" onclick="showPage('assessment')">
-                        Take the Assessment
+                        Start Now
                     </button>
                     <button class="btn btn-outline" onclick="document.getElementById('about-section').scrollIntoView({behavior: 'smooth'})">
                         Learn More
@@ -52,90 +48,88 @@
             </div>
         </section>
 
-        <!-- About Section -->
         <section class="features" id="about-section">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-badge">About Dry Eye Disease</span>
-                    <h2>Understanding <span class="gradient-text">Dry Eye Syndrome</span></h2>
+                    <span class="section-badge">Features</span>
+                    <h2>Multi-Metric <span class="gradient-text">Assessment</span></h2>
                     <p class="section-description">
-                        Dry eye disease is a common condition affecting millions worldwide, characterized by insufficient tear production or poor tear quality.
+                        One form, multiple detailed health reports.
                     </p>
                 </div>
                 
                 <div class="features-grid">
                     <div class="card feature-card">
-                        <h3>Risk Factors</h3>
-                        <p>Extended screen time, poor sleep quality, contact lens use, aging, and certain medications can increase your risk of developing dry eye syndrome.</p>
+                        <h3>BMI Analysis</h3>
+                        <p>Analyze body mass index to detect overweight, obesity or underweight conditions.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <h3>Common Symptoms</h3>
-                        <p>Symptoms include eye discomfort, burning sensation, redness, light sensitivity, blurred vision, and a gritty feeling in the eyes.</p>
+                        <h3>Blood Pressure</h3>
+                        <p>Evaluate blood pressure status and warn about hypertension risks.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <h3>Prevention</h3>
-                        <p>Regular breaks from screens, adequate hydration, proper sleep, and using blue-light filters can help reduce your risk of dry eye disease.</p>
+                        <h3>Eye Health</h3>
+                        <p>Predict dry eye disease risk from screen usage habits and symptoms.</p>
                     </div>
                     
                     <div class="card feature-card">
-                        <h3>Our AI Model</h3>
-                        <p>Our XGBoost machine learning model analyzes 25+ health and lifestyle factors to provide an accurate risk assessment for dry eye disease.</p>
+                        <h3>Sleep Quality</h3>
+                        <p>Assess sleep health and provide improvement recommendations.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- How It Works -->
         <section class="how-it-works">
             <div class="container">
                 <div class="section-header">
-                    <span class="section-badge">Simple Process</span>
-                    <h2>How It <span class="gradient-text">Works</span></h2>
+                    <span class="section-badge">How It Works</span>
+                    <h2>Simple <span class="gradient-text">Process</span></h2>
                 </div>
                 
                 <div class="steps-grid">
                     <div class="step-card">
                         <div class="step-number">1</div>
-                        <h3>Enter Your Information</h3>
-                        <p>Fill out a comprehensive health questionnaire covering your personal info, lifestyle habits, and current symptoms.</p>
+                        <h3>Enter Information</h3>
+                        <p>Fill in basic metrics: height, weight, blood pressure, sleep habits...</p>
                     </div>
                     
                     <div class="step-card">
                         <div class="step-number">2</div>
                         <h3>AI Analysis</h3>
-                        <p>Our machine learning model processes your data using advanced algorithms trained on clinical datasets.</p>
+                        <p>Our AI system analyzes your data and calculates health indicators.</p>
                     </div>
                     
                     <div class="step-card">
                         <div class="step-number">3</div>
-                        <h3>Get Your Results</h3>
-                        <p>Receive an instant risk assessment with probability score and personalized risk level classification.</p>
+                        <h3>Get Results</h3>
+                        <p>View detailed reports with personalized recommendations.</p>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- ===== ASSESSMENT PAGE ===== -->
+    <!-- ASSESSMENT PAGE -->
     <div id="page-assessment" class="page">
         <section class="page-header">
             <div class="container">
                 <span class="section-badge">Health Assessment</span>
-                <h1>Dry Eye Risk <span class="gradient-text">Assessment</span></h1>
-                <p>Complete the form below to receive your personalized dry eye disease risk assessment.</p>
+                <h1>Health <span class="gradient-text">Check</span></h1>
+                <p>Fill in the information below to receive your health report.</p>
             </div>
         </section>
         
         <section class="assessment-section">
             <div class="container">
                 <form id="assessment-form" class="assessment-form">
-                    <!-- Section 1: Personal Information -->
+                    <!-- Section 1: Core Info -->
                     <div class="form-section">
                         <div class="form-section-header">
-                            <h2>Personal Information</h2>
-                            <p>Basic demographic and health metrics</p>
+                            <h2>Basic Information</h2>
+                            <p>Required fields</p>
                         </div>
                         
                         <div class="form-grid">
@@ -164,39 +158,14 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="bp-systolic">Blood Pressure (Systolic) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
-                                <input type="number" id="bp-systolic" name="BP_Systolic" min="80" max="200" placeholder="Default: 120">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="bp-diastolic">Blood Pressure (Diastolic) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
-                                <input type="number" id="bp-diastolic" name="BP_Diastolic" min="50" max="130" placeholder="Default: 80">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="heart-rate">Heart Rate (bpm) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
-                                <input type="number" id="heart-rate" name="Heart rate" min="40" max="150" placeholder="Default: 75">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 2: Sleep Health -->
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <h2>Sleep Health</h2>
-                            <p>Your sleep patterns and quality</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="sleep-duration">Sleep Duration (hours)</label>
-                                <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" placeholder="4-10" required>
+                                <label for="sleep-duration">Sleep Duration (hours/day)</label>
+                                <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" placeholder="6-9" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="sleep-quality">Sleep Quality (1-5)</label>
                                 <select id="sleep-quality" name="Sleep quality" required>
-                                    <option value="">Select quality</option>
+                                    <option value="">Select level</option>
                                     <option value="1">1 - Very Poor</option>
                                     <option value="2">2 - Poor</option>
                                     <option value="3">3 - Average</option>
@@ -205,43 +174,6 @@
                                 </select>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="sleep-disorder">Sleep Disorder</label>
-                                <select id="sleep-disorder" name="Sleep disorder" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="wake-up-night">Wake Up During Night</label>
-                                <select id="wake-up-night" name="Wake up during night" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="sleepy-day">Feel Sleepy During Day</label>
-                                <select id="sleepy-day" name="Feel sleepy during day" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 3: Lifestyle -->
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <h2>Lifestyle</h2>
-                            <p>Daily habits and activity levels</p>
-                        </div>
-                        
-                        <div class="form-grid">
                             <div class="form-group">
                                 <label for="stress-level">Stress Level (1-5)</label>
                                 <select id="stress-level" name="Stress level" required>
@@ -255,126 +187,33 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="daily-steps">Daily Steps <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
-                                <input type="number" id="daily-steps" name="Daily steps" min="0" max="50000" placeholder="Default: 8000">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="physical-activity">Physical Activity (min/day) <span style="color: var(--text-muted); font-weight: 400;">(Optional)</span></label>
-                                <input type="number" id="physical-activity" name="Physical activity" min="0" max="300" placeholder="Default: 30">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="caffeine">Caffeine Consumption</label>
-                                <select id="caffeine" name="Caffeine consumption" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="alcohol">Alcohol Consumption</label>
-                                <select id="alcohol" name="Alcohol consumption" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="smoking">Smoking</label>
-                                <select id="smoking" name="Smoking" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
+                                <label for="screen-time">Screen Time (hours/day)</label>
+                                <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" placeholder="1-12" required>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Section 4: Screen Usage -->
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <h2>Screen Usage</h2>
-                            <p>Digital device habits</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="screen-time">Average Screen Time (hours/day)</label>
-                                <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" placeholder="1-10" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="smart-device">Smart Device Before Bed</label>
-                                <select id="smart-device" name="Smart device before bed" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="blue-light">Blue-Light Filter</label>
-                                <select id="blue-light" name="Blue-light filter" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No (not using)</option>
-                                    <option value="Y">Yes (using)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 5: Medical History -->
-                    <div class="form-section">
-                        <div class="form-section-header">
-                            <h2>Medical History</h2>
-                            <p>Current health conditions</p>
-                        </div>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="medical-issue">Existing Medical Issues</label>
-                                <select id="medical-issue" name="Medical issue" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="medication">Currently on Medication</label>
-                                <select id="medication" name="Ongoing medication" required>
-                                    <option value="">Select option</option>
-                                    <option value="N">No</option>
-                                    <option value="Y">Yes</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Section 6: Eye Symptoms -->
+                    <!-- Section 2: Eye Symptoms -->
                     <div class="form-section">
                         <div class="form-section-header">
                             <h2>Eye Symptoms</h2>
-                            <p>Current eye-related symptoms</p>
+                            <p>Current eye condition</p>
                         </div>
                         
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="eye-strain">Discomfort / Eye-strain</label>
+                                <label for="eye-strain">Eye Strain / Discomfort</label>
                                 <select id="eye-strain" name="Discomfort Eye-strain" required>
-                                    <option value="">Select option</option>
+                                    <option value="">Select</option>
                                     <option value="N">No</option>
                                     <option value="Y">Yes</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label for="redness">Redness in Eyes</label>
+                                <label for="redness">Eye Redness</label>
                                 <select id="redness" name="Redness in eye" required>
-                                    <option value="">Select option</option>
+                                    <option value="">Select</option>
                                     <option value="N">No</option>
                                     <option value="Y">Yes</option>
                                 </select>
@@ -383,7 +222,7 @@
                             <div class="form-group">
                                 <label for="itchiness">Itchiness / Irritation</label>
                                 <select id="itchiness" name="Itchiness/Irritation in eye" required>
-                                    <option value="">Select option</option>
+                                    <option value="">Select</option>
                                     <option value="N">No</option>
                                     <option value="Y">Yes</option>
                                 </select>
@@ -391,10 +230,132 @@
                         </div>
                     </div>
                     
-                    <!-- Submit Button -->
+                    <!-- Section 3: Optional -->
+                    <div class="form-section optional-section">
+                        <div class="form-section-header expandable" onclick="toggleOptional()">
+                            <h2>Additional Information</h2>
+                            <p>Fill in for more detailed reports (optional)</p>
+                            <span class="expand-icon" id="expand-icon">+</span>
+                        </div>
+                        
+                        <div class="optional-content" id="optional-content">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="blood-pressure">Blood Pressure (e.g., 120/80)</label>
+                                    <input type="text" id="blood-pressure" name="Blood pressure" placeholder="120/80" pattern="\d{2,3}/\d{2,3}">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="heart-rate">Heart Rate (bpm)</label>
+                                    <input type="number" id="heart-rate" name="Heart rate" min="40" max="150" placeholder="60-100">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="daily-steps">Daily Steps</label>
+                                    <input type="number" id="daily-steps" name="Daily steps" min="0" max="50000" placeholder="5000-10000">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="physical-activity">Exercise (min/day)</label>
+                                    <input type="number" id="physical-activity" name="Physical activity" min="0" max="300" placeholder="15-60">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sleep-disorder">Sleep Disorder</label>
+                                    <select id="sleep-disorder" name="Sleep disorder">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="wake-up-night">Wake Up at Night</label>
+                                    <select id="wake-up-night" name="Wake up during night">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sleepy-day">Daytime Sleepiness</label>
+                                    <select id="sleepy-day" name="Feel sleepy during day">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="caffeine">Caffeine Consumption</label>
+                                    <select id="caffeine" name="Caffeine consumption">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="alcohol">Alcohol Consumption</label>
+                                    <select id="alcohol" name="Alcohol consumption">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="smoking">Smoking</label>
+                                    <select id="smoking" name="Smoking">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="medical-issue">Existing Medical Conditions</label>
+                                    <select id="medical-issue" name="Medical issue">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="medication">Currently on Medication</label>
+                                    <select id="medication" name="Ongoing medication">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="smart-device">Phone Before Bed</label>
+                                    <select id="smart-device" name="Smart device before bed">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="blue-light">Blue Light Filter</label>
+                                    <select id="blue-light" name="Blue-light filter">
+                                        <option value="">Select</option>
+                                        <option value="N">No</option>
+                                        <option value="Y">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary btn-lg">
-                            Get My Risk Assessment
+                            Check My Health
                         </button>
                         <button type="reset" class="btn btn-outline">
                             Clear Form
@@ -402,38 +363,65 @@
                     </div>
                 </form>
                 
-                <!-- Results Section (Hidden by default) -->
+                <!-- Results Section -->
                 <div id="results-section" class="results-section hidden">
                     <div class="results-card">
                         <div class="results-header">
-                            <h2>Your Assessment Results</h2>
-                            <p>Based on your responses, our AI model has analyzed your dry eye disease risk.</p>
+                            <h2>Health Assessment Results</h2>
+                            <p>Based on the information you provided</p>
+                        </div>
+                        
+                        <div class="disclaimer-banner">
+                            <strong>Important Notice:</strong> These results are generated by AI for informational and reference purposes only. They are not intended to replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for any health concerns.
                         </div>
                         
                         <div class="results-body">
-                            <div class="result-item">
-                                <span class="result-label">Prediction</span>
-                                <span class="result-value" id="result-prediction">-</span>
-                            </div>
-                            
-                            <div class="result-item">
-                                <span class="result-label">Risk Level</span>
-                                <span class="result-value risk-badge" id="result-risk">-</span>
-                            </div>
-                            
-                            <div class="result-item probability-item">
-                                <span class="result-label">Risk Probability</span>
-                                <div class="probability-display">
-                                    <div class="probability-bar">
-                                        <div class="probability-fill" id="probability-fill"></div>
-                                    </div>
-                                    <span class="probability-value" id="result-probability">0%</span>
+                            <!-- Health Summary -->
+                            <div class="health-summary" id="health-summary">
+                                <div class="summary-status" id="summary-status">
+                                    <span class="summary-label">Overall:</span>
+                                    <span class="summary-value" id="summary-message">Loading...</span>
                                 </div>
+                            </div>
+                            
+                            <!-- Health Cards Grid -->
+                            <div class="health-cards-grid" id="health-cards">
+                            </div>
+                            
+                            <!-- Dry Eye Result -->
+                            <div class="dry-eye-section">
+                                <h3>Dry Eye Prediction</h3>
+                                <div class="dry-eye-result" id="dry-eye-result">
+                                    <div class="result-item">
+                                        <span class="result-label">Result</span>
+                                        <span class="result-value" id="dry-eye-prediction">-</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Risk Level</span>
+                                        <span class="result-value risk-badge" id="dry-eye-risk">-</span>
+                                    </div>
+                                    <div class="result-item probability-item">
+                                        <span class="result-label">Probability</span>
+                                        <div class="probability-display">
+                                            <div class="probability-bar">
+                                                <div class="probability-fill" id="probability-fill"></div>
+                                            </div>
+                                            <span class="probability-value" id="dry-eye-probability">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations -->
+                            <div class="recommendations-section">
+                                <h3>Recommendations</h3>
+                                <ul class="recommendations-list" id="recommendations-list">
+                                </ul>
                             </div>
                         </div>
                         
                         <div class="results-footer">
-                            <p class="disclaimer">This assessment is for informational purposes only and should not replace professional medical advice. Please consult an eye care specialist for a comprehensive evaluation.</p>
+                            <p class="disclaimer">This AI-powered assessment is for reference purposes only and should not be used as a substitute for professional medical advice. If you have any health concerns, please consult a qualified healthcare provider.</p>
                             <button class="btn btn-outline" onclick="resetAssessment()">Take Another Assessment</button>
                         </div>
                     </div>
@@ -442,7 +430,6 @@
         </section>
     </div>
 
-    <!-- Main JavaScript -->
     <script src="/js/app.js"></script>
 </body>
 </html>

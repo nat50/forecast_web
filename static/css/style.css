@@ -1,6 +1,6 @@
 /* 
- * DryEye Predict - Professional Healthcare Theme
- * Colors: Deep Blue (#1565C0) + Teal (#00897B) + Semantic Risk Colors
+ * Healthcatchers - Health Assessment Platform
+ * Clean, professional healthcare theme
  */
 
 /* ===== CSS Variables ===== */
@@ -28,17 +28,15 @@
     --border: #E2E8F0;
     --border-light: #EDF2F7;
 
-    /* Risk Level Colors */
-    --risk-low: #43A047;
-    --risk-moderate: #FFA000;
-    --risk-high: #F57C00;
-    --risk-very-high: #E53935;
-
     /* Status Colors */
-    --success: #43A047;
-    --warning: #FFA000;
-    --error: #E53935;
-    --info: #1976D2;
+    --status-good: #43A047;
+    --status-good-bg: rgba(67, 160, 71, 0.1);
+    --status-warning: #FFA000;
+    --status-warning-bg: rgba(255, 160, 0, 0.1);
+    --status-danger: #E53935;
+    --status-danger-bg: rgba(229, 57, 53, 0.1);
+    --status-unknown: #9E9E9E;
+    --status-unknown-bg: rgba(158, 158, 158, 0.1);
 
     /* Shadows */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -78,7 +76,6 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -92,16 +89,33 @@ a:hover {
 }
 
 /* ===== Typography ===== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 700;
     line-height: 1.3;
     color: var(--text-primary);
 }
 
-h1 { font-size: 2.75rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.375rem; }
-h4 { font-size: 1.125rem; font-weight: 600; }
+h1 {
+    font-size: 2.75rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.375rem;
+}
+
+h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
 
 p {
     line-height: 1.7;
@@ -136,6 +150,7 @@ p {
         opacity: 0;
         transform: translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -166,9 +181,6 @@ p {
     font-size: 1.375rem;
     font-weight: 700;
     color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .nav-links {
@@ -246,17 +258,6 @@ p {
     box-shadow: none;
 }
 
-.btn-secondary {
-    background: var(--secondary);
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 137, 123, 0.3);
-}
-
-.btn-secondary:hover {
-    background: var(--secondary-dark);
-    box-shadow: 0 4px 16px rgba(0, 137, 123, 0.4);
-}
-
 .btn-outline {
     background: transparent;
     border: 2px solid var(--border);
@@ -316,7 +317,6 @@ p {
 
 .hero p {
     font-size: 1.125rem;
-    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto 36px;
 }
@@ -424,7 +424,6 @@ p {
 }
 
 .page-header p {
-    color: var(--text-secondary);
     font-size: 1.0625rem;
     max-width: 600px;
     margin: 0 auto;
@@ -453,6 +452,7 @@ p {
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--border-light);
+    position: relative;
 }
 
 .form-section-header h2 {
@@ -465,6 +465,55 @@ p {
     font-size: 0.875rem;
     color: var(--text-muted);
     margin: 0;
+}
+
+/* Optional Section */
+.optional-section .form-section-header.expandable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.optional-section .form-section-header.expandable:hover {
+    background: var(--bg-primary);
+    margin: -16px -16px 24px -16px;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+}
+
+.expand-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    transition: transform var(--transition-normal);
+}
+
+.expand-icon.expanded {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.optional-content {
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+.optional-content.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form-grid {
@@ -525,7 +574,7 @@ p {
 
 /* ===== Results Section ===== */
 .results-section {
-    max-width: 700px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -553,15 +602,147 @@ p {
     margin: 0;
 }
 
+/* Disclaimer Banner */
+.disclaimer-banner {
+    padding: 16px 24px;
+    background: #FFF3E0;
+    border-left: 4px solid #FF9800;
+    color: #E65100;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
 .results-body {
-    padding: 40px 32px;
+    padding: 32px;
+}
+
+/* Health Summary */
+.health-summary {
+    margin-bottom: 32px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+}
+
+.summary-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.summary-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.summary-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.summary-value.good {
+    color: var(--status-good);
+}
+
+.summary-value.warning {
+    color: var(--status-warning);
+}
+
+.summary-value.danger {
+    color: var(--status-danger);
+}
+
+/* Health Cards Grid */
+.health-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.health-card {
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+}
+
+.health-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.health-card-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.health-card-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.health-card-status.good {
+    background: var(--status-good-bg);
+    color: var(--status-good);
+}
+
+.health-card-status.warning {
+    background: var(--status-warning-bg);
+    color: var(--status-warning);
+}
+
+.health-card-status.danger {
+    background: var(--status-danger-bg);
+    color: var(--status-danger);
+}
+
+.health-card-status.unknown {
+    background: var(--status-unknown-bg);
+    color: var(--status-unknown);
+}
+
+.health-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.health-card-message {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Dry Eye Section */
+.dry-eye-section {
+    margin-bottom: 32px;
+    padding: 24px;
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+}
+
+.dry-eye-section h3 {
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.dry-eye-result {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .result-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 12px 0;
     border-bottom: 1px solid var(--border-light);
 }
 
@@ -575,43 +756,42 @@ p {
 }
 
 .result-value {
-    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-primary);
 }
 
-/* Risk Badge Styles */
+/* Risk Badge */
 .risk-badge {
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 0.9375rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.875rem;
 }
 
 .risk-badge.risk-low {
-    background: rgba(67, 160, 71, 0.1);
-    color: var(--risk-low);
+    background: var(--status-good-bg);
+    color: var(--status-good);
 }
 
 .risk-badge.risk-moderate {
-    background: rgba(255, 160, 0, 0.1);
-    color: var(--risk-moderate);
+    background: var(--status-warning-bg);
+    color: var(--status-warning);
 }
 
 .risk-badge.risk-high {
     background: rgba(245, 124, 0, 0.1);
-    color: var(--risk-high);
+    color: #F57C00;
 }
 
 .risk-badge.risk-very-high {
-    background: rgba(229, 57, 53, 0.1);
-    color: var(--risk-very-high);
+    background: var(--status-danger-bg);
+    color: var(--status-danger);
 }
 
 /* Probability Display */
 .probability-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
 }
 
 .probability-display {
@@ -623,43 +803,68 @@ p {
 
 .probability-bar {
     flex: 1;
-    height: 12px;
-    background: var(--bg-primary);
-    border-radius: 6px;
+    height: 10px;
+    background: var(--border-light);
+    border-radius: 5px;
     overflow: hidden;
 }
 
 .probability-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 5px;
     transition: width 0.8s ease;
     background: var(--primary);
 }
 
 .probability-fill.risk-low {
-    background: var(--risk-low);
+    background: var(--status-good);
 }
 
 .probability-fill.risk-moderate {
-    background: var(--risk-moderate);
+    background: var(--status-warning);
 }
 
 .probability-fill.risk-high {
-    background: var(--risk-high);
+    background: #F57C00;
 }
 
 .probability-fill.risk-very-high {
-    background: var(--risk-very-high);
+    background: var(--status-danger);
 }
 
 .probability-value {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-primary);
-    min-width: 80px;
+    min-width: 60px;
     text-align: right;
 }
 
+/* Recommendations */
+.recommendations-section {
+    margin-bottom: 24px;
+}
+
+.recommendations-section h3 {
+    margin-bottom: 16px;
+    color: var(--primary);
+}
+
+.recommendations-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recommendations-list li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--secondary);
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+}
+
+/* Results Footer */
 .results-footer {
     padding: 24px 32px;
     background: var(--bg-primary);
@@ -670,7 +875,6 @@ p {
     font-size: 0.8125rem;
     color: var(--text-muted);
     margin-bottom: 20px;
-    line-height: 1.6;
 }
 
 /* ===== Responsive ===== */
@@ -698,6 +902,10 @@ p {
 
     .form-actions .btn {
         width: 100%;
+    }
+
+    .health-cards-grid {
+        grid-template-columns: 1fr;
     }
 
     .result-item {
@@ -730,6 +938,6 @@ p {
     }
 
     .results-body {
-        padding: 24px 20px;
+        padding: 20px;
     }
 }
