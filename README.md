@@ -10,10 +10,9 @@ Web application for comprehensive health assessment including dry eye disease pr
 - **Blood Pressure Monitoring**: Hypertension risk detection
 - **Sleep Health Evaluation**: Sleep duration and quality assessment
 - **Lifestyle Analysis**: Activity, habits, and risk factor scoring
-- **Real-time Results**: WebSocket-based instant feedback
 
 ## Project Structure
-
+ 
 ```
 forecast_web/
 ├── server.py                    # Main web server
@@ -23,6 +22,7 @@ forecast_web/
 │   └── health_analyzer.py       # Multi-health analysis service
 ├── model/
 │   ├── predict_explain.py       # Dry eye prediction API
+│   ├── dry_eye_xgboost.ipynb    # Model training notebook
 │   ├── xgboost_dry_eye_model.joblib
 │   └── Dry Eye Disease/         # Training dataset
 └── static/
@@ -31,38 +31,57 @@ forecast_web/
     └── js/app.js                # Frontend logic
 ```
 
-## Quick Start
+## Setup
 
-**Install dependencies:**
+### 1. Create Virtual Environment
+
+```bash
+# Windows
+python -m venv venv
+.\venv\Scripts\activate
+
+# Linux/macOS
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-**Run the application:**
+### 3. Train Model (Optional)
+
+If you need to retrain the model, open and run the Jupyter notebook:
+
 ```bash
+# Install Jupyter if not installed
+pip install jupyter
+
+# Run notebook
+jupyter notebook model/dry_eye_xgboost.ipynb
+```
+
+Run all cells in the notebook. The trained model will be saved as `model/xgboost_dry_eye_model.joblib`.
+
+### 4. Run Web Server
+
+```bash
+# With venv activated
 python server.py
+
+# Or specify host and port
+python server.py --server-ip 0.0.0.0 --server-port 9000
 ```
 
-**With virtual environment:**
-```bash
-.\venv\Scripts\python.exe server.py
+### 5. Access Web Application
+
+Open browser and navigate to:
+
 ```
-
-Open browser: `http://127.0.0.1:9000`
-
-## Health Reports
-
-### Basic Reports (Required Fields)
-- **BMI**: Weight status classification
-- **Sleep**: Duration and quality assessment
-- **Stress**: Mental health indicator
-- **Dry Eye**: AI prediction with probability
-
-### Advanced Reports (Optional Fields)
-- **Blood Pressure**: Hypertension risk levels
-- **Cardiovascular**: Heart rate analysis
-- **Advanced Sleep**: Sleep disorders detection
-- **Lifestyle**: Activity and habits scoring
+http://127.0.0.1:9000
+```
 
 ## Technology Stack
 
