@@ -144,22 +144,22 @@
                             
                             <div class="form-group">
                                 <label for="age">Age</label>
-                                <input type="number" id="age" name="Age" min="18" max="100" placeholder="18-100" required>
+                                <input type="number" id="age" name="Age" min="18" max="100" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="height">Height (cm)</label>
-                                <input type="number" id="height" name="Height" min="100" max="250" placeholder="150-200" required>
+                                <input type="number" id="height" name="Height" min="100" max="250" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="weight">Weight (kg)</label>
-                                <input type="number" id="weight" name="Weight" min="30" max="200" placeholder="50-100" required>
+                                <input type="number" id="weight" name="Weight" min="30" max="200" required>
                             </div>
                             
                             <div class="form-group">
                                 <label for="sleep-duration">Sleep Duration (hours/day)</label>
-                                <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" placeholder="6-9" required>
+                                <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" required>
                             </div>
                             
                             <div class="form-group">
@@ -188,7 +188,7 @@
                             
                             <div class="form-group">
                                 <label for="screen-time">Screen Time (hours/day)</label>
-                                <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" placeholder="1-12" required>
+                                <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" required>
                             </div>
                         </div>
                     </div>
@@ -242,22 +242,22 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="blood-pressure">Blood Pressure (e.g., 120/80)</label>
-                                    <input type="text" id="blood-pressure" name="Blood pressure" placeholder="120/80" pattern="\d{2,3}/\d{2,3}">
+                                    <input type="text" id="blood-pressure" name="Blood pressure" pattern="\d{2,3}/\d{2,3}">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="heart-rate">Heart Rate (bpm)</label>
-                                    <input type="number" id="heart-rate" name="Heart rate" min="40" max="150" placeholder="60-100">
+                                    <input type="number" id="heart-rate" name="Heart rate" min="40" max="150">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="daily-steps">Daily Steps</label>
-                                    <input type="number" id="daily-steps" name="Daily steps" min="0" max="50000" placeholder="5000-10000">
+                                    <input type="number" id="daily-steps" name="Daily steps" min="0" max="50000">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="physical-activity">Exercise (min/day)</label>
-                                    <input type="number" id="physical-activity" name="Physical activity" min="0" max="300" placeholder="15-60">
+                                    <input type="number" id="physical-activity" name="Physical activity" min="0" max="300">
                                 </div>
                                 
                                 <div class="form-group">
@@ -363,65 +363,129 @@
                     </div>
                 </form>
                 
-                <!-- Results Section -->
+                <!-- Dashboard Results Section -->
                 <div id="results-section" class="results-section hidden">
-                    <div class="results-card">
-                        <div class="results-header">
-                            <h2>Health Assessment Results</h2>
-                            <p>Based on the information you provided</p>
+                    <div class="dashboard-container">
+                        <!-- Dashboard Header -->
+                        <div class="dashboard-header">
+                            <div class="dashboard-title">
+                                <h2>Health Assessment Dashboard</h2>
+                                <p class="dashboard-subtitle">Comprehensive analysis based on your information</p>
+                            </div>
+                            <div class="patient-info">
+                                <span class="patient-age" id="patient-age">Age: --</span>
+                            </div>
                         </div>
-                        
+
+                        <!-- Disclaimer Banner -->
                         <div class="disclaimer-banner">
-                            <strong>Important Notice:</strong> These results are generated by AI for informational and reference purposes only. They are not intended to replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for any health concerns.
+                            <strong>Important:</strong> This AI-powered assessment is for reference only. Consult a healthcare provider for medical advice.
                         </div>
-                        
-                        <div class="results-body">
-                            <!-- Health Summary -->
-                            <div class="health-summary" id="health-summary">
-                                <div class="summary-status" id="summary-status">
-                                    <span class="summary-label">Overall:</span>
-                                    <span class="summary-value" id="summary-message">Loading...</span>
+
+                        <!-- Main Dashboard Grid -->
+                        <div class="dashboard-grid">
+                            <!-- Risk Gauge Panel -->
+                            <div class="dashboard-panel risk-gauge-panel">
+                                <h3 class="panel-title">Risk Score</h3>
+                                <div class="gauge-container">
+                                    <svg class="gauge-svg" viewBox="0 0 200 120">
+                                        <defs>
+                                            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#0d9488"/>
+                                                <stop offset="50%" style="stop-color:#d97706"/>
+                                                <stop offset="100%" style="stop-color:#dc2626"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <!-- Background arc -->
+                                        <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round"/>
+                                        <!-- Value arc -->
+                                        <path class="gauge-value" id="gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGradient)" stroke-width="16" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                                        <!-- Needle -->
+                                        <line class="gauge-needle" id="gauge-needle" x1="100" y1="100" x2="100" y2="30" stroke="#1a365d" stroke-width="3" stroke-linecap="round"/>
+                                        <!-- Center circle -->
+                                        <circle cx="100" cy="100" r="8" fill="#1a365d"/>
+                                    </svg>
+                                    <div class="gauge-value-display">
+                                        <span class="gauge-percentage" id="gauge-percentage">0%</span>
+                                        <span class="gauge-label" id="gauge-label">Calculating...</span>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <!-- Health Cards Grid -->
+
+                            <!-- Distribution Chart Panel -->
+                            <div class="dashboard-panel distribution-panel">
+                                <h3 class="panel-title">Population Comparison</h3>
+                                <div class="distribution-container">
+                                    <canvas id="distribution-chart" width="280" height="140"></canvas>
+                                    <div class="distribution-insight" id="distribution-insight">
+                                        Your risk is higher than <strong id="percentile-value">--</strong>% of people with similar age and habits.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Risk Drivers Panel -->
+                            <div class="dashboard-panel risk-drivers-panel">
+                                <h3 class="panel-title">Key Risk Drivers</h3>
+                                <div class="risk-drivers-list" id="risk-drivers-list">
+                                    <!-- Dynamically populated -->
+                                </div>
+                                <div class="main-factor" id="main-factor">
+                                    <span class="main-factor-label">Primary Factor:</span>
+                                    <span class="main-factor-value" id="main-factor-value">--</span>
+                                </div>
+                            </div>
+
+                            <!-- Symptoms Panel -->
+                            <div class="dashboard-panel symptoms-panel">
+                                <h3 class="panel-title">Symptoms Analysis</h3>
+                                <p class="panel-subtitle">Compared to similar profiles</p>
+                                <div class="symptoms-list" id="symptoms-list">
+                                    <div class="symptom-item">
+                                        <span class="symptom-name">Eye Strain</span>
+                                        <div class="symptom-bar-container">
+                                            <div class="symptom-bar" id="symptom-strain" style="width: 0%"></div>
+                                        </div>
+                                        <span class="symptom-value" id="symptom-strain-value">--%</span>
+                                        <span class="symptom-you" id="symptom-strain-you"></span>
+                                    </div>
+                                    <div class="symptom-item">
+                                        <span class="symptom-name">Dryness</span>
+                                        <div class="symptom-bar-container">
+                                            <div class="symptom-bar" id="symptom-dryness" style="width: 0%"></div>
+                                        </div>
+                                        <span class="symptom-value" id="symptom-dryness-value">--%</span>
+                                        <span class="symptom-you" id="symptom-dryness-you"></span>
+                                    </div>
+                                    <div class="symptom-item">
+                                        <span class="symptom-name">Redness</span>
+                                        <div class="symptom-bar-container">
+                                            <div class="symptom-bar" id="symptom-redness" style="width: 0%"></div>
+                                        </div>
+                                        <span class="symptom-value" id="symptom-redness-value">--%</span>
+                                        <span class="symptom-you" id="symptom-redness-you"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Plan Panel -->
+                            <div class="dashboard-panel action-panel">
+                                <h3 class="panel-title">Recommended Actions</h3>
+                                <div class="action-list" id="action-list">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Health Cards Summary -->
+                        <div class="health-summary-section">
+                            <h3 class="section-title">Health Metrics Overview</h3>
                             <div class="health-cards-grid" id="health-cards">
                             </div>
-                            
-                            <!-- Dry Eye Result -->
-                            <div class="dry-eye-section">
-                                <h3>Dry Eye Prediction</h3>
-                                <div class="dry-eye-result" id="dry-eye-result">
-                                    <div class="result-item">
-                                        <span class="result-label">Result</span>
-                                        <span class="result-value" id="dry-eye-prediction">-</span>
-                                    </div>
-                                    <div class="result-item">
-                                        <span class="result-label">Risk Level</span>
-                                        <span class="result-value risk-badge" id="dry-eye-risk">-</span>
-                                    </div>
-                                    <div class="result-item probability-item">
-                                        <span class="result-label">Probability</span>
-                                        <div class="probability-display">
-                                            <div class="probability-bar">
-                                                <div class="probability-fill" id="probability-fill"></div>
-                                            </div>
-                                            <span class="probability-value" id="dry-eye-probability">0%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Recommendations -->
-                            <div class="recommendations-section">
-                                <h3>Recommendations</h3>
-                                <ul class="recommendations-list" id="recommendations-list">
-                                </ul>
-                            </div>
                         </div>
-                        
-                        <div class="results-footer">
-                            <p class="disclaimer">This AI-powered assessment is for reference purposes only and should not be used as a substitute for professional medical advice. If you have any health concerns, please consult a qualified healthcare provider.</p>
+
+                        <!-- Dashboard Footer -->
+                        <div class="dashboard-footer">
+                            <p class="footer-disclaimer">This assessment provides general guidance only. For medical concerns, please consult a qualified healthcare professional.</p>
                             <button class="btn btn-outline" onclick="resetAssessment()">Take Another Assessment</button>
                         </div>
                     </div>

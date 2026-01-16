@@ -123,6 +123,95 @@ class DryEyePredictor:
             })
         
         return results
+
+    def predict_with_shap(self, data: pd.DataFrame, threshold: float = 0.5) -> list:
+        """Predict with SHAP explanations for dashboard display."""
+        X = self.preprocess_input(data)
+        
+        probability = self.model.predict_proba(X)[:, 1]
+        prediction = (probability >= threshold).astype(int)
+        shap_values = self.explainer.shap_values(X)
+        
+        results = []
+        for i in range(len(X)):
+            sample_shap = shap_values[i]
+            feature_names = X.columns.tolist()
+            
+            contributions = sorted(
+                zip(feature_names, sample_shap),
+                key=lambda x: abs(x[1]),
+                reverse=True
+            )
+            
+            risk_factors = []
+            protective_factors = []
+            
+            for name, value in contributions[:10]:
+                display_name = self._get_display_name(name)
+                impact = self._get_impact_level(abs(value))
+                
+                factor_info = {
+                    'name': display_name,
+                    'shap_value': float(value),
+                    'impact': impact
+                }
+                
+                if value > 0:
+                    risk_factors.append(factor_info)
+                else:
+                    protective_factors.append(factor_info)
+            
+            results.append({
+                'prediction': 'Dry Eye Disease' if prediction[i] == 1 else 'No Dry Eye Disease',
+                'probability': float(probability[i]),
+                'risk_level': self._get_risk_level(probability[i]),
+                'risk_factors': risk_factors[:5],
+                'protective_factors': protective_factors[:3],
+                'percentile': self._calculate_percentile(probability[i])
+            })
+        
+        return results
+
+    def _get_display_name(self, feature_name: str) -> str:
+        """Convert feature names to human-readable display names."""
+        name_map = {
+            'Average screen time': 'Screen Time',
+            'Sleep duration': 'Sleep Duration',
+            'Sleep quality': 'Sleep Quality',
+            'Stress level': 'Stress Level',
+            'Eye_Load': 'Eye Strain Load',
+            'Screen_to_Sleep_Ratio': 'Screen/Sleep Ratio',
+            'Stress_Metabolic': 'Metabolic Stress',
+            'BP_Systolic': 'Blood Pressure',
+            'BP_Diastolic': 'Diastolic BP',
+            'BMI': 'Body Mass Index',
+            'Age': 'Age',
+            'Discomfort Eye-strain': 'Eye Discomfort',
+            'Redness in eye': 'Eye Redness',
+            'Itchiness/Irritation in eye': 'Eye Irritation',
+            'Smart device before bed': 'Device Before Bed',
+            'Blue-light filter': 'Blue Light Filter',
+            'Physical activity': 'Physical Activity',
+            'Daily steps': 'Daily Steps',
+            'Heart rate': 'Heart Rate',
+            'Caffeine consumption': 'Caffeine Intake',
+            'Wake up during night': 'Night Waking',
+            'Feel sleepy during day': 'Daytime Sleepiness'
+        }
+        return name_map.get(feature_name, feature_name.replace('_', ' ').title())
+
+    def _get_impact_level(self, abs_shap_value: float) -> str:
+        """Categorize SHAP value impact level."""
+        if abs_shap_value >= 0.3:
+            return 'high'
+        elif abs_shap_value >= 0.15:
+            return 'medium'
+        else:
+            return 'low'
+
+    def _calculate_percentile(self, probability: float) -> int:
+        """Calculate approximate percentile based on probability."""
+        return min(99, max(1, int(probability * 100)))
     
     def _get_risk_level(self, prob: float) -> str:
         if prob < 0.3:

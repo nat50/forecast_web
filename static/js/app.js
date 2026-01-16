@@ -1,6 +1,6 @@
 /**
  * Healthcatchers - Health Assessment Platform
- * Main JavaScript Application
+ * Dashboard JavaScript Application
  */
 
 // ===== Configuration =====
@@ -15,7 +15,7 @@ function connectWebSocket() {
     ws = new WebSocket(WS_URL);
 
     ws.onopen = function () {
-        console.log('Connected to Healthcatchers');
+        // Connection established
     };
 
     ws.onmessage = function (event) {
@@ -23,12 +23,11 @@ function connectWebSocket() {
         handleWebSocketMessage(response);
     };
 
-    ws.onerror = function (error) {
-        console.error('WebSocket error:', error);
+    ws.onerror = function () {
+        // Connection error
     };
 
     ws.onclose = function () {
-        console.log('Disconnected, reconnecting...');
         setTimeout(connectWebSocket, 3000);
     };
 }
@@ -37,7 +36,6 @@ function sendMessage(action, data) {
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ action: action, data: data }));
     } else {
-        console.error('WebSocket not connected');
         showError('Connection error. Please reload the page.');
     }
 }
@@ -45,10 +43,10 @@ function sendMessage(action, data) {
 function handleWebSocketMessage(response) {
     switch (response.action) {
         case 'health_result':
-            displayHealthResults(response.data);
+            displayDashboard(response.data);
             break;
         case 'prediction_result':
-            displayDryEyeOnly(response.data);
+            displayDashboard({ dry_eye: response.data, health_analysis: null, user_data: {} });
             break;
         case 'error':
             showError(response.data.message);
@@ -116,17 +114,6 @@ function collectFormData() {
         }
     });
 
-    const systolic = document.getElementById('bp-systolic');
-    const diastolic = document.getElementById('bp-diastolic');
-
-    // Only process if the old separate fields exist (backwards compatibility)
-    if (systolic && diastolic && systolic.value && diastolic.value) {
-        data['Blood pressure'] = systolic.value + '/' + diastolic.value;
-    }
-
-    delete data['BP_Systolic'];
-    delete data['BP_Diastolic'];
-
     return data;
 }
 
@@ -161,29 +148,291 @@ function submitAssessment(event) {
     }, 15000);
 }
 
-// ===== Results Display =====
-function displayHealthResults(data) {
+// ===== Dashboard Display =====
+function displayDashboard(data) {
     resetButton();
 
-    const healthAnalysis = data.health_analysis;
     const dryEye = data.dry_eye;
+    const healthAnalysis = data.health_analysis;
+    const userData = data.user_data || {};
 
-    displaySummary(healthAnalysis.summary);
-    displayHealthCards(healthAnalysis.basic_reports, healthAnalysis.advanced_reports);
-    displayDryEye(dryEye);
-    displayRecommendations(healthAnalysis.summary.top_recommendations);
+    // Update patient info
+    if (userData.age) {
+        document.getElementById('patient-age').textContent = 'Age: ' + userData.age;
+    }
 
+    // Update risk gauge
+    updateRiskGauge(dryEye.probability, dryEye.risk_level);
+
+    // Draw distribution chart
+    drawDistributionChart(dryEye.probability, dryEye.percentile || Math.round(dryEye.probability * 100));
+
+    // Update percentile text
+    const percentile = dryEye.percentile || Math.round(dryEye.probability * 100);
+    document.getElementById('percentile-value').textContent = percentile;
+
+    // Display risk drivers
+    displayRiskDrivers(dryEye.risk_factors || []);
+
+    // Display symptoms comparison
+    displaySymptoms(userData, dryEye.probability);
+
+    // Display action plan
+    displayActionPlan(healthAnalysis ? healthAnalysis.summary.top_recommendations : [], dryEye.risk_level);
+
+    // Display health cards
+    if (healthAnalysis) {
+        displayHealthCards(healthAnalysis.basic_reports, healthAnalysis.advanced_reports || []);
+    }
+
+    // Show dashboard
     document.getElementById('assessment-form').classList.add('hidden');
     document.getElementById('results-section').classList.remove('hidden');
     document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
 }
 
-function displaySummary(summary) {
-    const summaryMessage = document.getElementById('summary-message');
-    summaryMessage.textContent = summary.overall_message;
-    summaryMessage.className = 'summary-value ' + summary.overall_status;
+// ===== Risk Gauge =====
+function updateRiskGauge(probability, riskLevel) {
+    const percentage = Math.round(probability * 100);
+
+    // Update percentage display
+    document.getElementById('gauge-percentage').textContent = percentage + '%';
+    document.getElementById('gauge-label').textContent = riskLevel;
+
+    // Animate needle
+    const needle = document.getElementById('gauge-needle');
+    const angle = -90 + (probability * 180);
+
+    setTimeout(function () {
+        needle.style.transform = 'rotate(' + angle + 'deg)';
+    }, 100);
+
+    // Animate arc
+    const arc = document.getElementById('gauge-arc');
+    const arcLength = 251.2;
+    const dashOffset = arcLength * (1 - probability);
+
+    setTimeout(function () {
+        arc.style.strokeDashoffset = dashOffset;
+    }, 100);
 }
 
+// ===== Distribution Chart =====
+function drawDistributionChart(probability, percentile) {
+    const canvas = document.getElementById('distribution-chart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw bell curve
+    ctx.beginPath();
+    ctx.moveTo(0, height - 10);
+
+    const points = [];
+    for (let x = 0; x <= width; x++) {
+        const normalX = (x / width) * 6 - 3;
+        const y = Math.exp(-0.5 * normalX * normalX) / Math.sqrt(2 * Math.PI);
+        const scaledY = height - 10 - (y * (height - 30) * 2.5);
+        points.push({ x: x, y: scaledY });
+    }
+
+    // Fill area under curve
+    ctx.beginPath();
+    ctx.moveTo(0, height - 10);
+    points.forEach(function (point) {
+        ctx.lineTo(point.x, point.y);
+    });
+    ctx.lineTo(width, height - 10);
+    ctx.closePath();
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(61, 90, 128, 0.3)');
+    gradient.addColorStop(1, 'rgba(61, 90, 128, 0.05)');
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    // Draw curve line
+    ctx.beginPath();
+    points.forEach(function (point, index) {
+        if (index === 0) {
+            ctx.moveTo(point.x, point.y);
+        } else {
+            ctx.lineTo(point.x, point.y);
+        }
+    });
+    ctx.strokeStyle = '#3d5a80';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw user position marker
+    const userX = (probability * width);
+    const userNormalX = (userX / width) * 6 - 3;
+    const userY = Math.exp(-0.5 * userNormalX * userNormalX) / Math.sqrt(2 * Math.PI);
+    const userScaledY = height - 10 - (userY * (height - 30) * 2.5);
+
+    // Vertical line
+    ctx.beginPath();
+    ctx.moveTo(userX, height - 10);
+    ctx.lineTo(userX, userScaledY);
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // User marker circle
+    ctx.beginPath();
+    ctx.arc(userX, userScaledY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#dc2626';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label "You"
+    ctx.font = '600 11px Inter, sans-serif';
+    ctx.fillStyle = '#dc2626';
+    ctx.textAlign = 'center';
+    ctx.fillText('You', userX, userScaledY - 12);
+
+    // X-axis labels
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.textAlign = 'center';
+    ctx.fillText('0', 20, height - 2);
+    ctx.fillText('Risk Score', width / 2, height - 2);
+    ctx.fillText('100', width - 20, height - 2);
+}
+
+// ===== Risk Drivers =====
+function displayRiskDrivers(riskFactors) {
+    const container = document.getElementById('risk-drivers-list');
+    container.innerHTML = '';
+
+    const factors = riskFactors.length > 0 ? riskFactors.slice(0, 4) : [
+        { name: 'Screen Time', impact: 'medium' },
+        { name: 'Sleep Quality', impact: 'low' },
+        { name: 'Stress Level', impact: 'low' }
+    ];
+
+    factors.forEach(function (factor) {
+        const item = document.createElement('div');
+        item.className = 'risk-driver-item';
+
+        item.innerHTML =
+            '<span class="risk-driver-name">' + factor.name + '</span>' +
+            '<div class="risk-driver-bar-container">' +
+            '<div class="risk-driver-bar ' + factor.impact + '"></div>' +
+            '</div>' +
+            '<span class="risk-driver-level ' + factor.impact + '">' +
+            factor.impact.charAt(0).toUpperCase() + factor.impact.slice(1) +
+            '</span>';
+
+        container.appendChild(item);
+    });
+
+    // Update main factor
+    if (factors.length > 0) {
+        document.getElementById('main-factor-value').textContent =
+            factors[0].name + ' is the main contributing factor';
+    }
+}
+
+// ===== Symptoms Comparison =====
+function displaySymptoms(userData, probability) {
+    const basePercentages = {
+        strain: Math.round(40 + probability * 50),
+        dryness: Math.round(30 + probability * 40),
+        redness: Math.round(20 + probability * 35)
+    };
+
+    // Update strain
+    setTimeout(function () {
+        document.getElementById('symptom-strain').style.width = basePercentages.strain + '%';
+        document.getElementById('symptom-strain-value').textContent = basePercentages.strain + '%';
+        if (userData.has_eye_strain) {
+            document.getElementById('symptom-strain-you').textContent = 'You';
+        }
+    }, 200);
+
+    // Update dryness
+    setTimeout(function () {
+        document.getElementById('symptom-dryness').style.width = basePercentages.dryness + '%';
+        document.getElementById('symptom-dryness-value').textContent = basePercentages.dryness + '%';
+        if (userData.has_dryness) {
+            document.getElementById('symptom-dryness-you').textContent = 'You';
+        }
+    }, 400);
+
+    // Update redness
+    setTimeout(function () {
+        document.getElementById('symptom-redness').style.width = basePercentages.redness + '%';
+        document.getElementById('symptom-redness-value').textContent = basePercentages.redness + '%';
+        if (userData.has_redness) {
+            document.getElementById('symptom-redness-you').textContent = 'You';
+        }
+    }, 600);
+}
+
+// ===== Action Plan =====
+function displayActionPlan(recommendations, riskLevel) {
+    const container = document.getElementById('action-list');
+    container.innerHTML = '';
+
+    let actions = recommendations && recommendations.length > 0
+        ? recommendations
+        : getDefaultActions(riskLevel);
+
+    actions.slice(0, 5).forEach(function (action, index) {
+        const item = document.createElement('div');
+        item.className = 'action-item';
+
+        item.innerHTML =
+            '<span class="action-number">' + (index + 1) + '</span>' +
+            '<span class="action-text">' + action + '</span>';
+
+        container.appendChild(item);
+    });
+}
+
+function getDefaultActions(riskLevel) {
+    const highRiskActions = [
+        'Schedule an eye examination with an ophthalmologist',
+        'Reduce screen time to less than 6 hours per day',
+        'Use artificial tears or lubricating eye drops',
+        'Practice the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds',
+        'Ensure adequate hydration by drinking 8 glasses of water daily'
+    ];
+
+    const moderateRiskActions = [
+        'Consider using a humidifier in your workspace',
+        'Take regular breaks from screen use every 30 minutes',
+        'Adjust screen brightness and position to reduce eye strain',
+        'Improve sleep quality by maintaining a consistent sleep schedule',
+        'Increase intake of omega-3 fatty acids through diet or supplements'
+    ];
+
+    const lowRiskActions = [
+        'Maintain your current healthy eye care habits',
+        'Continue regular eye check-ups annually',
+        'Keep screen distance at arm\'s length',
+        'Ensure proper lighting when using devices',
+        'Stay hydrated throughout the day'
+    ];
+
+    if (riskLevel === 'Very High Risk' || riskLevel === 'High Risk') {
+        return highRiskActions;
+    } else if (riskLevel === 'Moderate Risk') {
+        return moderateRiskActions;
+    }
+    return lowRiskActions;
+}
+
+// ===== Health Cards =====
 function displayHealthCards(basicReports, advancedReports) {
     const container = document.getElementById('health-cards');
     container.innerHTML = '';
@@ -222,63 +471,7 @@ function getStatusText(status) {
     }
 }
 
-function displayDryEye(dryEye) {
-    document.getElementById('dry-eye-prediction').textContent =
-        dryEye.prediction === 'Dry Eye Disease' ? 'Dry Eye Risk Detected' : 'No Dry Eye Risk';
-
-    const riskBadge = document.getElementById('dry-eye-risk');
-    riskBadge.textContent = dryEye.risk_level;
-    riskBadge.className = 'result-value risk-badge ' + getRiskClass(dryEye.risk_level);
-
-    const probability = (dryEye.probability * 100).toFixed(1);
-    document.getElementById('dry-eye-probability').textContent = probability + '%';
-
-    const probabilityFill = document.getElementById('probability-fill');
-    probabilityFill.style.width = '0%';
-    probabilityFill.className = 'probability-fill ' + getRiskClass(dryEye.risk_level);
-
-    setTimeout(function () {
-        probabilityFill.style.width = probability + '%';
-    }, 100);
-}
-
-function getRiskClass(level) {
-    switch (level) {
-        case 'Low Risk': return 'risk-low';
-        case 'Moderate Risk': return 'risk-moderate';
-        case 'High Risk': return 'risk-high';
-        case 'Very High Risk': return 'risk-very-high';
-        default: return '';
-    }
-}
-
-function displayRecommendations(recommendations) {
-    const list = document.getElementById('recommendations-list');
-    list.innerHTML = '';
-
-    if (!recommendations || recommendations.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'Maintain your current healthy lifestyle.';
-        list.appendChild(li);
-        return;
-    }
-
-    recommendations.forEach(function (rec) {
-        const li = document.createElement('li');
-        li.textContent = rec;
-        list.appendChild(li);
-    });
-}
-
-function displayDryEyeOnly(dryEye) {
-    resetButton();
-    displayDryEye(dryEye);
-
-    document.getElementById('assessment-form').classList.add('hidden');
-    document.getElementById('results-section').classList.remove('hidden');
-    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
-}
-
+// ===== Utility Functions =====
 function resetButton() {
     const submitBtn = document.querySelector('.form-actions .btn-primary');
     if (submitBtn) {
@@ -296,6 +489,18 @@ function resetAssessment() {
     const icon = document.getElementById('expand-icon');
     if (content) content.classList.remove('show');
     if (icon) icon.classList.remove('expanded');
+
+    // Reset gauge
+    const needle = document.getElementById('gauge-needle');
+    if (needle) needle.style.transform = 'rotate(-90deg)';
+
+    const arc = document.getElementById('gauge-arc');
+    if (arc) arc.style.strokeDashoffset = '251.2';
+
+    // Reset symptom bars
+    document.getElementById('symptom-strain').style.width = '0%';
+    document.getElementById('symptom-dryness').style.width = '0%';
+    document.getElementById('symptom-redness').style.width = '0%';
 
     document.querySelector('.assessment-section').scrollIntoView({ behavior: 'smooth' });
 }

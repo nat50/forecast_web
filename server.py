@@ -104,18 +104,23 @@ class HealthcatchersServer:
     def _handle_health_check(self, data: dict) -> dict:
         """Handle full health assessment request."""
         try:
-            # Get multi-health analysis
             health_results = self.analyzer.analyze(data)
 
-            # Get dry eye prediction
             df = pd.DataFrame([data])
-            dry_eye_results = self.predictor.predict(df)
+            dry_eye_results = self.predictor.predict_with_shap(df)
 
             return {
                 "action": "health_result",
                 "data": {
                     "health_analysis": health_results,
-                    "dry_eye": dry_eye_results[0]
+                    "dry_eye": dry_eye_results[0],
+                    "user_data": {
+                        "age": data.get("Age", 30),
+                        "screen_time": data.get("Average screen time", 6),
+                        "has_eye_strain": data.get("Discomfort Eye-strain") == "Y",
+                        "has_redness": data.get("Redness in eye") == "Y",
+                        "has_dryness": data.get("Itchiness/Irritation in eye") == "Y"
+                    }
                 }
             }
         except Exception as e:

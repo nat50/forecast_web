@@ -5,50 +5,59 @@
 
 /* ===== CSS Variables ===== */
 :root {
-    /* Primary Colors */
-    --primary: #1565C0;
-    --primary-light: #1976D2;
-    --primary-dark: #0D47A1;
+    /* Primary Colors - Professional Navy */
+    --primary: #1a365d;
+    --primary-light: #2d4a6f;
+    --primary-dark: #0f2942;
 
-    /* Secondary Colors */
-    --secondary: #00897B;
-    --secondary-light: #26A69A;
-    --secondary-dark: #00695C;
+    /* Secondary Colors - Slate */
+    --secondary: #3d5a80;
+    --secondary-light: #5c7a9e;
+    --secondary-dark: #2a3f5a;
 
     /* Accent */
-    --accent: #E3F2FD;
+    --accent: #e8eef4;
 
     /* Neutrals */
-    --bg-primary: #F5F7FA;
-    --bg-secondary: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --text-primary: #1A202C;
-    --text-secondary: #4A5568;
-    --text-muted: #718096;
-    --border: #E2E8F0;
-    --border-light: #EDF2F7;
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #1a202c;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
 
     /* Status Colors */
-    --status-good: #43A047;
-    --status-good-bg: rgba(67, 160, 71, 0.1);
-    --status-warning: #FFA000;
-    --status-warning-bg: rgba(255, 160, 0, 0.1);
-    --status-danger: #E53935;
-    --status-danger-bg: rgba(229, 57, 53, 0.1);
-    --status-unknown: #9E9E9E;
-    --status-unknown-bg: rgba(158, 158, 158, 0.1);
+    --status-good: #0d9488;
+    --status-good-bg: rgba(13, 148, 136, 0.1);
+    --status-warning: #d97706;
+    --status-warning-bg: rgba(217, 119, 6, 0.1);
+    --status-danger: #dc2626;
+    --status-danger-bg: rgba(220, 38, 38, 0.1);
+    --status-unknown: #94a3b8;
+    --status-unknown-bg: rgba(148, 163, 184, 0.1);
+
+    /* Dashboard Colors */
+    --dashboard-bg: #f1f5f9;
+    --panel-bg: #ffffff;
+    --navy-50: #f0f4f8;
+    --navy-100: #e2e8f0;
+    --navy-200: #cbd5e1;
+    --navy-600: #475569;
+    --navy-800: #1e293b;
 
     /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
-    --shadow-card: 0 2px 8px rgba(21, 101, 192, 0.08);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
 
     /* Border Radius */
     --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
 
     /* Transitions */
     --transition-fast: 0.15s ease;
@@ -939,5 +948,469 @@ p {
 
     .results-body {
         padding: 20px;
+    }
+}
+
+/* ===== Dashboard Styles ===== */
+.dashboard-container {
+    background: var(--dashboard-bg);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-title h2 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.dashboard-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    margin: 4px 0 0 0;
+}
+
+.patient-info {
+    display: flex;
+    gap: 16px;
+}
+
+.patient-age {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    padding: 24px;
+}
+
+.dashboard-panel {
+    background: var(--panel-bg);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.panel-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 16px 0;
+}
+
+.panel-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: -12px 0 16px 0;
+}
+
+/* Risk Gauge Panel */
+.risk-gauge-panel {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.gauge-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge-svg {
+    width: 180px;
+    height: 100px;
+}
+
+.gauge-needle {
+    transform-origin: 100px 100px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge-value-display {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.gauge-percentage {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.gauge-label {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Distribution Panel */
+.distribution-panel {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.distribution-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#distribution-chart {
+    width: 100%;
+    height: 120px;
+}
+
+.distribution-insight {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 12px;
+    background: var(--navy-50);
+    border-radius: var(--radius-sm);
+    line-height: 1.5;
+}
+
+.distribution-insight strong {
+    color: var(--primary);
+}
+
+/* Risk Drivers Panel */
+.risk-drivers-panel {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.risk-drivers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.risk-driver-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.risk-driver-name {
+    flex: 0 0 100px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.risk-driver-bar-container {
+    flex: 1;
+    height: 8px;
+    background: var(--navy-100);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.risk-driver-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+.risk-driver-bar.high {
+    background: var(--status-danger);
+    width: 90%;
+}
+
+.risk-driver-bar.medium {
+    background: var(--status-warning);
+    width: 60%;
+}
+
+.risk-driver-bar.low {
+    background: var(--status-good);
+    width: 30%;
+}
+
+.risk-driver-level {
+    flex: 0 0 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.risk-driver-level.high {
+    color: var(--status-danger);
+}
+
+.risk-driver-level.medium {
+    color: var(--status-warning);
+}
+
+.risk-driver-level.low {
+    color: var(--status-good);
+}
+
+.main-factor {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+}
+
+.main-factor-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.main-factor-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Symptoms Panel */
+.symptoms-panel {
+    grid-column: 1 / 2;
+    grid-row: 2;
+}
+
+.symptoms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.symptom-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.symptom-name {
+    flex: 0 0 80px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.symptom-bar-container {
+    flex: 1;
+    height: 12px;
+    background: var(--navy-100);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.symptom-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-light) 0%, var(--secondary) 100%);
+    border-radius: 6px;
+    transition: width 0.8s ease;
+}
+
+.symptom-value {
+    flex: 0 0 40px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+}
+
+.symptom-you {
+    flex: 0 0 30px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Action Panel */
+.action-panel {
+    grid-column: 2 / 4;
+    grid-row: 2;
+}
+
+.action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--navy-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--secondary);
+}
+
+.action-number {
+    flex: 0 0 24px;
+    height: 24px;
+    background: var(--secondary);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.action-text {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Health Summary Section */
+.health-summary-section {
+    padding: 24px;
+    background: var(--panel-bg);
+    margin: 0 24px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 24px;
+}
+
+.health-summary-section .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 0 0 20px 0;
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+    padding: 24px 32px;
+    background: var(--panel-bg);
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-disclaimer {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0 0 16px 0;
+    line-height: 1.6;
+}
+
+/* Updated Disclaimer Banner */
+.dashboard-container .disclaimer-banner {
+    padding: 12px 24px;
+    background: var(--navy-50);
+    border-left: 4px solid var(--status-warning);
+    color: var(--navy-600);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Responsive Dashboard */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .risk-gauge-panel {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .distribution-panel {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .risk-drivers-panel {
+        grid-column: 1 / 3;
+        grid-row: 2;
+    }
+
+    .symptoms-panel {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    .action-panel {
+        grid-column: 2;
+        grid-row: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .dashboard-panel {
+        grid-column: 1 !important;
+    }
+
+    .risk-gauge-panel {
+        grid-row: 1;
+    }
+
+    .distribution-panel {
+        grid-row: 2;
+    }
+
+    .risk-drivers-panel {
+        grid-row: 3;
+    }
+
+    .symptoms-panel {
+        grid-row: 4;
+    }
+
+    .action-panel {
+        grid-row: 5;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .health-summary-section {
+        margin: 0 16px 16px;
+    }
+
+    .dashboard-grid {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .risk-driver-item {
+        flex-wrap: wrap;
+    }
+
+    .risk-driver-name {
+        flex: 0 0 100%;
+        margin-bottom: 4px;
     }
 }
