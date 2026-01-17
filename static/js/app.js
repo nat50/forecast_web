@@ -48,6 +48,9 @@ function handleWebSocketMessage(response) {
         case 'prediction_result':
             displayDashboard({ dry_eye: response.data, health_analysis: null, user_data: {} });
             break;
+        case 'recommendation_details':
+            handleRecommendationDetails(response.data);
+            break;
         case 'error':
             showError(response.data.message);
             break;
@@ -352,8 +355,8 @@ function displayRiskDrivers(riskFactors) {
 
     // Update main factor
     if (factors.length > 0) {
-        document.getElementById('main-factor-value').textContent =
-            factors[0].name + ' is the main contributing factor';
+        document.getElementById('main-factor-value').textContent = 'Based on the current assessment, ' +
+            factors[0].name + ' is associated with increased risk.';
     }
 }
 
@@ -390,6 +393,37 @@ function displaySymptoms(userData, probability) {
         if (userData.has_redness) {
             document.getElementById('symptom-redness-you').textContent = 'You';
         }
+
+        // Add explanation text
+        const explanationContainer = document.getElementById('symptoms-explanation');
+        explanationContainer.innerHTML = '';
+        
+        const parts = [];
+        if (userData.has_eye_strain) {
+            parts.push(basePercentages.strain + '% of people suffering from Eye Strain');
+        }
+        if (userData.has_dryness) {
+            parts.push(basePercentages.dryness + '% of people suffering from Dryness');
+        }
+        if (userData.has_redness) {
+            parts.push(basePercentages.redness + '% of people suffering from Redness');
+        }
+
+        if (parts.length > 0) {
+            let text = 'You belong to the ';
+            if (parts.length === 1) {
+                text += parts[0] + '.';
+            } else if (parts.length === 2) {
+                text += parts[0] + ' and the ' + parts[1] + '.';
+            } else {
+                // 3 items
+                text += parts[0] + ', the ' + parts[1] + ', and the ' + parts[2] + '.';
+            }
+            
+            const p = document.createElement('p');
+            p.textContent = text;
+            explanationContainer.appendChild(p);
+        }
     }, 600);
 }
 
@@ -405,10 +439,13 @@ function displayActionPlan(recommendations, riskLevel) {
     actions.slice(0, 5).forEach(function (action, index) {
         const item = document.createElement('div');
         item.className = 'action-item';
+        item.onclick = function() { showRecommendationDetails(action); };
+        item.title = "Click for detailed plan";
 
         item.innerHTML =
             '<span class="action-number">' + (index + 1) + '</span>' +
-            '<span class="action-text">' + action + '</span>';
+            '<span class="action-text">' + action + '</span>' +
+            '<span style="margin-left:auto; color:var(--primary); font-size:0.8em;">Details &rarr;</span>';
 
         container.appendChild(item);
     });
@@ -523,6 +560,129 @@ function resetAssessment() {
 function showError(message) {
     resetButton();
     alert('Error: ' + message);
+}
+
+
+// ===== Detailed Recommendations =====
+function showRecommendationDetails(text) {
+    const modal = document.getElementById('detail-modal');
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content-text');
+    const resources = document.getElementById('modal-resources');
+    
+    // Show loading state
+    modal.classList.add('show');
+    title.textContent = 'Generating Plan...';
+    content.textContent = 'Consulting AI for detailed instructions...';
+    resources.innerHTML = '';
+    
+    // Send request
+    const formData = collectFormData();
+    sendMessage('get_recommendation_details', {
+        recommendation: text,
+        user_data: {
+            age: formData.Age,
+            screen_time: formData['Average screen time'],
+            has_eye_strain: formData['Discomfort Eye-strain'] === 'Y',
+            has_redness: formData['Redness in eye'] === 'Y',
+            has_dryness: formData['Itchiness/Irritation in eye'] === 'Y'
+        }
+    });
+}
+
+function formatMarkdown(text) {
+    if (!text) return '';
+    
+    // Escape HTML first to prevent XSS
+    let html = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    // Headers (### Header)
+    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+    // Bold (**text**)
+    html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+    
+    // Italic (*text*)
+    html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+
+    // Bullet points (* Item)
+    // First, handle unordered lists properly
+    // We replace lines starting with * or - with <li>
+    html = html.replace(/^[\*\-] (.*$)/gim, '<li>$1</li>');
+    
+    // Wrap consecutive <li> in <ul> (simple approximation)
+    // A more robust way is to just let them be, but wrapping them looks better.
+    // For simplicity, we can just replace newlines with <br> for non-list items.
+    
+    // Paragraphs / Line breaks
+    html = html.replace(/\n\n/gim, '<br><br>');
+    html = html.replace(/\n/gim, '<br>'); // Simple newline
+    
+    // Cleanup: </ul><ul> if we had proper list wrapping, but for now 
+    // let's simple-list style it by adding a class to the container that handles bullets if they are <li>
+    // Actually, just replacing * with &#8226; (bullet) and <br> might be safer if we don't fully parse ULs.
+    // But let's try the <li> approach and wrap the whole content in a div that handles it? 
+    // No, let's keep it simple:
+    
+    return html;
+}
+
+function handleRecommendationDetails(data) {
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content-text');
+    const resources = document.getElementById('modal-resources');
+    
+    title.textContent = data.title;
+    
+    // Format content
+    let formattedHTML = formatMarkdown(data.content);
+    
+    // Wrap lists if any (rough heuristic)
+    // If we have <li>, we should ideally wrap them. 
+    // Browser might handle orphan <li> but it's not valid.
+    // Let's rely on standard list styling or just use bullet symbols.
+    // Let's redo the list part to be safer:
+    
+    // Alternative List Strategy:
+    // Replace * point with • point and <br>
+    // formattedHTML = formattedHTML.replace(/<li>(.*?)<\/li>/gim, '• $1<br>');
+    
+    content.innerHTML = formattedHTML;
+    
+    // Add resources if available
+    resources.innerHTML = '';
+    if (data.resources && data.resources.length > 0) {
+        const header = document.createElement('h4');
+        header.textContent = 'Recommended Searches:';
+        header.style.marginBottom = '10px';
+        resources.appendChild(header);
+        
+        data.resources.forEach(function(query) {
+            const link = document.createElement('a');
+            link.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+            link.target = '_blank';
+            link.className = 'resource-link';
+            link.textContent = query;
+            resources.appendChild(link);
+        });
+    }
+}
+
+function closeModal() {
+    document.getElementById('detail-modal').classList.remove('show');
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('detail-modal');
+    if (event.target == modal) {
+        closeModal();
+    }
 }
 
 // ===== Initialize =====

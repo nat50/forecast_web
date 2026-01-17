@@ -30,6 +30,7 @@ sys.path.insert(0, str(SERVICES_DIR))
 
 from predict_explain import DryEyePredictor
 from health_analyzer import HealthAnalyzer
+from recommendation_service import RecommendationService
 
 
 class HealthcatchersServer:
@@ -39,11 +40,12 @@ class HealthcatchersServer:
         self.predictor: DryEyePredictor | None = None
         self.analyzer: HealthAnalyzer | None = None
 
-    def initialize(self) -> None:
+    async def initialize(self) -> None:
         """Initialize prediction and analysis services."""
         print("Loading services...")
         self.predictor = DryEyePredictor(model_dir=str(MODEL_DIR))
         self.analyzer = HealthAnalyzer()
+        self.recommendation_service = RecommendationService()
         print("Services loaded successfully!")
 
     async def handle_index(self, request: web.Request) -> web.FileResponse:
@@ -90,9 +92,12 @@ class HealthcatchersServer:
             input_data = data.get("data", {})
 
             if action == "health_check":
-                return self._handle_health_check(input_data)
+                # Run this in a thread pool since it might involve blocking API calls
+                return await self._run_blocking(self._handle_health_check, input_data)
             elif action == "predict_dry_eye":
                 return self._handle_dry_eye_prediction(input_data)
+            elif action == "get_recommendation_details":
+                return await self._run_blocking(self._handle_recommendation_details, input_data)
             else:
                 return self._error_response(f"Unknown action: {action}")
 
@@ -101,19 +106,44 @@ class HealthcatchersServer:
         except Exception as e:
             return self._error_response(f"Server error: {str(e)}")
 
+    async def _run_blocking(self, func, *args):
+        """Run blocking function in executor."""
+        import asyncio
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, func, *args)
+
     def _handle_health_check(self, data: dict) -> dict:
         """Handle full health assessment request."""
         try:
             health_results = self.analyzer.analyze(data)
 
             df = pd.DataFrame([data])
-            dry_eye_results = self.predictor.predict_with_shap(df)
+            dry_eye_results = self.predictor.predict_with_shap(df)[0]
+            
+            # Generate AI recommendations
+            print("Generating AI recommendations...")
+            recommendations = self.recommendation_service.generate_recommendations(
+                user_data={
+                    "Age": data.get("Age", 30),
+                    "Gender": data.get("Gender", "N/A"),
+                    "Average screen time": data.get("Average screen time", 6),
+                    "Sleep duration": data.get("Sleep duration", 7),
+                    "Sleep quality": data.get("Sleep quality", 3),
+                    "Discomfort Eye-strain": data.get("Discomfort Eye-strain"),
+                    "Redness in eye": data.get("Redness in eye"),
+                    "Itchiness/Irritation in eye": data.get("Itchiness/Irritation in eye")
+                },
+                prediction_result=dry_eye_results
+            )
+            
+            # Update summary with AI recommendations
+            health_results["summary"]["top_recommendations"] = recommendations
 
             return {
                 "action": "health_result",
                 "data": {
                     "health_analysis": health_results,
-                    "dry_eye": dry_eye_results[0],
+                    "dry_eye": dry_eye_results,
                     "user_data": {
                         "age": data.get("Age", 30),
                         "screen_time": data.get("Average screen time", 6),
@@ -124,6 +154,9 @@ class HealthcatchersServer:
                 }
             }
         except Exception as e:
+            print(f"Error in health check: {e}")
+            import traceback
+            traceback.print_exc()
             return self._error_response(f"Analysis error: {str(e)}")
 
     def _handle_dry_eye_prediction(self, data: dict) -> dict:
@@ -138,6 +171,28 @@ class HealthcatchersServer:
             }
         except Exception as e:
             return self._error_response(f"Prediction error: {str(e)}")
+
+    def _handle_recommendation_details(self, data: dict) -> dict:
+        """Handle request for detailed recommendation plan."""
+        try:
+            print(f"Generating details for: {data.get('recommendation', 'Unknown')}")
+            details = self.recommendation_service.generate_detailed_plan(
+                recommendation_text=data.get('recommendation', ''),
+                user_data={
+                    "Age": data.get("user_data", {}).get("age"),
+                    "Average screen time": data.get("user_data", {}).get("screen_time"),
+                    "Discomfort Eye-strain": "Y" if data.get("user_data", {}).get("has_eye_strain") else "N",
+                    "Redness in eye": "Y" if data.get("user_data", {}).get("has_redness") else "N",
+                    "Itchiness/Irritation in eye": "Y" if data.get("user_data", {}).get("has_dryness") else "N"
+                }
+            )
+            
+            return {
+                "action": "recommendation_details",
+                "data": details
+            }
+        except Exception as e:
+            return self._error_response(f"Detail generation error: {str(e)}")
 
     @staticmethod
     def _error_response(message: str) -> dict:
@@ -185,7 +240,9 @@ def main() -> None:
 
     # Initialize server
     server = HealthcatchersServer()
-    server.initialize()
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(server.initialize())
 
     app = create_app(server)
 
