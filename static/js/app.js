@@ -199,6 +199,21 @@ function updateRiskGauge(probability, riskLevel) {
     document.getElementById('gauge-percentage').textContent = percentage + '%';
     document.getElementById('gauge-label').textContent = riskLevel;
 
+    // Update explanation text
+    const explanationEl = document.getElementById('gauge-explanation');
+    if (explanationEl) {
+        let explanation = 'This result shows a ' + percentage + '% risk of dry eye, ';
+        if (percentage > 40) {
+            explanation += 'indicating that your eyes may be under strain.';
+        } else {
+            explanation += 'indicating that your eyes are in a healthy condition.';
+        }
+        explanationEl.textContent = explanation;
+        console.log('Updated explanation:', explanation);
+    } else {
+        console.error('Explanation element not found!');
+    }
+
     // Animate needle
     const needle = document.getElementById('gauge-needle');
     const angle = -90 + (probability * 180);

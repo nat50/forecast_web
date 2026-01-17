@@ -1414,3 +1414,15 @@ p {
         margin-bottom: 4px;
     }
 }
+
+/* Gauge Explanation */
+.gauge-explanation {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+}
