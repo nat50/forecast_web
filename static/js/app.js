@@ -185,6 +185,10 @@ function displayDashboard(data) {
         displayHealthCards(healthAnalysis.basic_reports, healthAnalysis.advanced_reports || []);
     }
 
+    // Initialize feedback stars
+    initFeedbackRating();
+
+
     // Show dashboard
     document.getElementById('assessment-form').classList.add('hidden');
     document.getElementById('results-section').classList.remove('hidden');
@@ -525,6 +529,51 @@ function showError(message) {
     alert('Error: ' + message);
 }
 
+// ===== Feedback Rating =====
+function initFeedbackRating() {
+    const stars = document.querySelectorAll(".star");
+    const message = document.getElementById("feedback-message");
+
+    if (!stars.length || !message) return;
+
+    let selectedRating = 0;
+
+    const feedbackTexts = {
+        1: "😞 Sorry for the poor experience. Could you tell us what went wrong?",
+        2: "😕 We appreciate your honesty. What can we improve?",
+        3: "🙂 Thanks! The assessment was okay, but there's room to improve.",
+        4: "😊 Great! We're glad you found this helpful.",
+        5: "🌟 Awesome! Thank you for your support and trust."
+    };
+
+    stars.forEach(star => {
+        star.addEventListener("mouseenter", () => {
+            highlightStars(star.dataset.value);
+            message.textContent = feedbackTexts[star.dataset.value];
+        });
+
+        star.addEventListener("mouseleave", () => {
+            highlightStars(selectedRating);
+            message.textContent = selectedRating
+                ? feedbackTexts[selectedRating]
+                : "Hover or click a star to rate";
+        });
+
+        star.addEventListener("click", () => {
+            selectedRating = star.dataset.value;
+            highlightStars(selectedRating);
+            message.textContent = feedbackTexts[selectedRating];
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            star.classList.toggle("selected", star.dataset.value <= rating);
+        });
+    }
+}
+
+
 // ===== Initialize =====
 document.addEventListener('DOMContentLoaded', function () {
     connectWebSocket();
@@ -534,3 +583,5 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', submitAssessment);
     }
 });
+
+
