@@ -156,7 +156,79 @@
                                 <label for="weight">Weight (kg)</label>
                                 <input type="number" id="weight" name="Weight" min="30" max="200" required>
                             </div>
+
+                            <div class="form-group">
+                                <label for="caffeine">Caffeine Consumption</label>
+                                <select id="caffeine" name="Caffeine consumption">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
                             
+                            <div class="form-group">
+                                <label for="alcohol">Alcohol Consumption</label>
+                                <select id="alcohol" name="Alcohol consumption">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="smoking">Smoking</label>
+                                <select id="smoking" name="Smoking">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medical-issue">Existing Medical Conditions</label>
+                                <select id="medical-issue" name="Medical issue">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medication">Currently on Medication</label>
+                                <select id="medication" name="Ongoing medication">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="smart-device">Phone Before Bed</label>
+                                <select id="smart-device" name="Smart device before bed">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="blue-light">Blue Light Filter</label>
+                                <select id="blue-light" name="Blue-light filter">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 2: Sleep health -->
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <h2>Sleep health</h2>
+                            <p>Current sleep health condition</p>
+                        </div>
+                        <div class="form-grid">
                             <div class="form-group">
                                 <label for="sleep-duration">Sleep Duration (hours/day)</label>
                                 <input type="number" id="sleep-duration" name="Sleep duration" min="1" max="14" step="0.5" required>
@@ -190,10 +262,37 @@
                                 <label for="screen-time">Screen Time (hours/day)</label>
                                 <input type="number" id="screen-time" name="Average screen time" min="0" max="24" step="0.5" required>
                             </div>
+
+                            <div class="form-group">
+                                <label for="sleep-disorder">Sleep Disorder</label>
+                                <select id="sleep-disorder" name="Sleep disorder">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="wake-up-night">Wake Up at Night</label>
+                                <select id="wake-up-night" name="Wake up during night">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="wake-up-night">Daytime Sleepiness</label>
+                                <select id="wake-up-night" name="Wake up during night">
+                                    <option value="">Select</option>
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Section 2: Eye Symptoms -->
+                    <!-- Section 3: Eye Symptoms -->
                     <div class="form-section">
                         <div class="form-section-header">
                             <h2>Eye Symptoms</h2>
@@ -258,96 +357,6 @@
                                 <div class="form-group">
                                     <label for="physical-activity">Exercise (min/day)</label>
                                     <input type="number" id="physical-activity" name="Physical activity" min="0" max="300">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="sleep-disorder">Sleep Disorder</label>
-                                    <select id="sleep-disorder" name="Sleep disorder">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="wake-up-night">Wake Up at Night</label>
-                                    <select id="wake-up-night" name="Wake up during night">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="sleepy-day">Daytime Sleepiness</label>
-                                    <select id="sleepy-day" name="Feel sleepy during day">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="caffeine">Caffeine Consumption</label>
-                                    <select id="caffeine" name="Caffeine consumption">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="alcohol">Alcohol Consumption</label>
-                                    <select id="alcohol" name="Alcohol consumption">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="smoking">Smoking</label>
-                                    <select id="smoking" name="Smoking">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="medical-issue">Existing Medical Conditions</label>
-                                    <select id="medical-issue" name="Medical issue">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="medication">Currently on Medication</label>
-                                    <select id="medication" name="Ongoing medication">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="smart-device">Phone Before Bed</label>
-                                    <select id="smart-device" name="Smart device before bed">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="blue-light">Blue Light Filter</label>
-                                    <select id="blue-light" name="Blue-light filter">
-                                        <option value="">Select</option>
-                                        <option value="N">No</option>
-                                        <option value="Y">Yes</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
